@@ -134,7 +134,7 @@ export function WatchPage({ schedule, isTestMode = false }: WatchPageProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.png"
-            alt="SCPP"
+            alt="MRT inc."
             className="h-6 w-auto object-contain drop-shadow-[0_0_10px_rgba(94,234,212,0.15)]"
           />
           <div className="flex items-center gap-3">
@@ -310,7 +310,7 @@ export function WatchPage({ schedule, isTestMode = false }: WatchPageProps) {
 
       {/* Copyright */}
       <footer className="relative z-10 py-4 text-center text-[10px] text-white/40">
-        © SCPP Co.,Ltd. All rights reserved.
+        © MRT inc. All rights reserved.
       </footer>
     </div>
   );
