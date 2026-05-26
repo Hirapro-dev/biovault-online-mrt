@@ -17,8 +17,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SCPPオンラインセミナー｜株式会社SCPP",
-  description: "SCPPオンラインセミナー視聴プラットフォーム",
+  title: "MRTオンラインセミナー｜MRT inc.",
+  description: "MRTオンラインセミナー視聴プラットフォーム",
   robots: { index: false, follow: false },
 };
 
