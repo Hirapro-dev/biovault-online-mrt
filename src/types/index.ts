@@ -67,3 +67,57 @@ export interface ChatMessage {
 }
 
 export type StreamStatus = "upcoming" | "live" | "ended";
+
+// ============================================
+// 録画配信システム
+// ============================================
+
+// 録画配信会員（機密保持同意者）
+export interface ArchiveMember {
+  id: string;
+  member_id: string; // 苗字(ローマ字) + ランダム4桁数字
+  password: string; // 電話番号下8桁
+  name: string;
+  name_kana: string;
+  phone: string;
+  email: string;
+  address: string;
+  confidentiality_agreed: boolean;
+  is_active: boolean;
+  created_at: string;
+}
+
+// 録画動画
+export interface ArchiveVideo {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  r2_key: string;
+  duration_seconds: number | null;
+  thumbnail_r2_key: string | null;
+  published_at: string | null;
+  expires_at: string | null;
+  max_views: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+// 視聴ログ（会員×動画ごとの集計）
+export interface ArchiveView {
+  id: string;
+  member_id: string;
+  video_id: string;
+  view_count: number;
+  total_watch_seconds: number | null;
+  last_viewed_at: string | null;
+  created_at: string;
+}
+
+// 再生履歴（1回の再生ごと）
+export interface ArchivePlayLog {
+  id: string;
+  member_id: string;
+  video_id: string;
+  played_at: string;
+}

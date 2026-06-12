@@ -118,3 +118,18 @@ function generateRandomDigits(): string {
   const num = Math.floor(Math.random() * 10000);
   return String(num).padStart(4, "0");
 }
+
+/**
+ * 録画配信の視聴ID生成
+ * 苗字（ふりがなの先頭単語）のローマ字 + 電話番号の下4桁
+ * 例: ふりがな「こわき たくや」+ 電話「09011112222」→ "kowaki2222"
+ * 苗字 or 電話が不足している場合は空文字を返す
+ */
+export function generateViewerId(nameKana: string, phone: string): string {
+  const parts = nameKana.trim().split(/[\s　]+/);
+  const familyNameKana = parts[0] || "";
+  const romaji = kanaToRomaji(familyNameKana);
+  const digits = phone.replace(/[^0-9]/g, "").slice(-4);
+  if (!romaji || digits.length < 4) return "";
+  return `${romaji}${digits}`;
+}

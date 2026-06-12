@@ -13,12 +13,18 @@ import {
   Menu,
   X,
   Settings,
+  Video,
+  UserCheck,
+  FileBarChart,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "ダッシュボード", icon: LayoutDashboard },
   { href: "/admin/customers", label: "顧客管理", icon: Users },
   { href: "/admin/schedules", label: "スケジュール", icon: Radio },
+  { href: "/admin/archive/members", label: "録画配信 会員", icon: UserCheck },
+  { href: "/admin/archive/videos", label: "録画配信 動画", icon: Video },
+  { href: "/admin/archive/logs", label: "録画配信 ログ", icon: FileBarChart },
   { href: "/admin/settings", label: "設定", icon: Settings },
 ];
 
