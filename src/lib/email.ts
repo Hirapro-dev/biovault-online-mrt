@@ -187,7 +187,8 @@ interface AdminNotificationParams {
   nameKana: string;
   phone: string;
   email: string;
-  address: string;
+  zipCode: string; // 郵便番号
+  address: string; // 郵便番号を除いた住所
   memberId: string;
   groupLabel: string; // 流入元の表示名（植田版 / 上田版）
 }
@@ -203,7 +204,7 @@ export async function sendAdminNotificationEmail(
     return false;
   }
 
-  const { name, nameKana, phone, email, address, memberId, groupLabel } = params;
+  const { name, nameKana, phone, email, zipCode, address, memberId, groupLabel } = params;
   const subject = `【録画配信】新規登録: ${name} 様（${groupLabel}）`;
 
   const text = `録画配信に新しい会員登録がありました。
@@ -215,7 +216,8 @@ export async function sendAdminNotificationEmail(
 ■ ふりがな： ${nameKana}
 ■ 電話番号： ${phone}
 ■ メール　： ${email}
-■ 住所　　： ${address}
+■ 郵便番号： ${zipCode || "（未入力）"}
+■ 住所　　： ${address || "（未入力）"}
 ──────────────────────
 
 会員一覧: 管理画面 → 録画配信 会員一覧 でご確認いただけます。`;

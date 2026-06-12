@@ -4,6 +4,16 @@ import { generateViewerId } from "@/lib/utils/kana-to-romaji";
 import { sendRegistrationEmail, sendAdminNotificationEmail } from "@/lib/email";
 import { archiveGroupLabel } from "@/lib/archive-group";
 
+// 保存住所「〒1234567 東京都...」を郵便番号と住所に分解する
+// 先頭の「〒+数字」を郵便番号として切り出し、残りを住所とする
+function splitAddress(full: string): { zipCode: string; address: string } {
+  const m = full.match(/^〒?\s*(\d{3}-?\d{4}|\d{7})\s*(.*)$/);
+  if (m) {
+    return { zipCode: m[1], address: m[2].trim() };
+  }
+  return { zipCode: "", address: full };
+}
+
 // 録画配信会員の登録
 export async function POST(request: NextRequest) {
   try {
@@ -118,7 +128,8 @@ export async function POST(request: NextRequest) {
           nameKana: name_kana.trim(),
           phone: phone!.trim(),
           email: email.trim(),
-          address: address.trim(),
+          // 保存住所「〒1234567 東京都...」を郵便番号と住所に分解
+          ...splitAddress(address.trim()),
           memberId,
           groupLabel: archiveGroupLabel(group),
         }),
