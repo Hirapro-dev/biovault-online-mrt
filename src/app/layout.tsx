@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "MRTオンラインセミナー｜MRT inc.",
+  title: "MRTオンラインセミナー｜株式会社MRT",
   description: "MRTオンラインセミナー視聴プラットフォーム",
   robots: { index: false, follow: false },
 };
