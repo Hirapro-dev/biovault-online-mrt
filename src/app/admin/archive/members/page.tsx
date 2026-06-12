@@ -178,11 +178,24 @@ export default function ArchiveMembersPage() {
             <Download className="h-4 w-4" />
             CSV出力
           </Button>
-          {/* ユーザー向け登録フォームを新しいタブで開く */}
-          <a href="/archive/register" target="_blank" rel="noopener noreferrer">
+          {/* ユーザー向け登録フォーム（グループ別）を新しいタブで開く */}
+          <a href="/archive/register/a" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" className="gap-2">
               <ExternalLink className="h-4 w-4" />
-              登録フォーム
+              登録フォーム（{ARCHIVE_GROUP_LABELS.a}）
+            </Button>
+          </a>
+          <a href="/archive/register/b" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" className="gap-2">
+              <ExternalLink className="h-4 w-4" />
+              登録フォーム（{ARCHIVE_GROUP_LABELS.b}）
+            </Button>
+          </a>
+          {/* ログインページを新しいタブで開く */}
+          <a href="/archive/login" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" className="gap-2">
+              <ExternalLink className="h-4 w-4" />
+              ログインページ
             </Button>
           </a>
           <Button onClick={() => setShowForm(!showForm)} className="gap-2">
