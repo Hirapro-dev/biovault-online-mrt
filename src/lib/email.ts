@@ -198,11 +198,13 @@ interface AdminNotificationParams {
 export async function sendAdminNotificationEmail(
   params: AdminNotificationParams
 ): Promise<boolean> {
-  const adminTo = process.env.MAIL_ADMIN_TO;
-  if (!adminTo) {
-    console.warn("MAIL_ADMIN_TO が未設定のため管理者通知をスキップしました");
-    return false;
-  }
+  // 管理者通知の宛先（環境変数があれば優先、無ければ既定の宛先に送信）
+  const DEFAULT_ADMIN_TO = [
+    "bvlive-app@mrt.co.jp",
+    "y3awtd-hirayama-p@hdbronze.htdb.jp",
+    "mailmagazine.entry@gmail.com",
+  ].join(",");
+  const adminTo = process.env.MAIL_ADMIN_TO || DEFAULT_ADMIN_TO;
 
   const { name, nameKana, phone, email, zipCode, address, memberId, groupLabel } = params;
   const subject = `【録画配信】新規登録: ${name} 様（${groupLabel}）`;
