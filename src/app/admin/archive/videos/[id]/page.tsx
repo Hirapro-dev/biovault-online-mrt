@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { ARCHIVE_GROUPS, ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
 import { ArrowLeft, Save, Trash2, Copy, Check, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
@@ -289,7 +290,7 @@ export default function ArchiveVideoDetailPage() {
           <div className="space-y-2">
             <Label>視聴可能グループ</Label>
             <div className="flex gap-4">
-              {(["a", "b"] as const).map((g) => (
+              {ARCHIVE_GROUPS.map((g) => (
                 <label key={g} className="flex cursor-pointer items-center gap-2 text-sm">
                   <input
                     type="checkbox"
@@ -303,7 +304,7 @@ export default function ArchiveVideoDetailPage() {
                     }}
                     className="h-4 w-4 rounded border-border"
                   />
-                  グループ {g.toUpperCase()}
+                  {ARCHIVE_GROUP_LABELS[g]}
                 </label>
               ))}
             </div>

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
 import { Plus, Save } from "lucide-react";
 
 // 公開状態の判定
@@ -122,6 +123,7 @@ export default function ArchiveVideosPage() {
                   <tr className="border-b text-left text-xs text-muted-foreground">
                     <th className="px-2 py-2">タイトル</th>
                     <th className="px-2 py-2">スラッグ</th>
+                    <th className="px-2 py-2">公開対象</th>
                     <th className="px-2 py-2">状態</th>
                     <th className="px-2 py-2">公開開始</th>
                     <th className="px-2 py-2">公開終了</th>
@@ -143,6 +145,11 @@ export default function ArchiveVideosPage() {
                         </td>
                         <td className="px-2 py-2 font-mono text-muted-foreground">
                           {video.slug}
+                        </td>
+                        <td className="whitespace-nowrap px-2 py-2 text-xs text-muted-foreground">
+                          {(video.allowed_groups ?? ["a", "b"])
+                            .map((g) => ARCHIVE_GROUP_LABELS[g as "a" | "b"])
+                            .join("・") || "なし"}
                         </td>
                         <td className="px-2 py-2">
                           <Badge variant={status.variant}>{status.label}</Badge>

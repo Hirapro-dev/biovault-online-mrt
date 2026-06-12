@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { archiveGroupLabel, ARCHIVE_GROUPS, ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
 import { Download, Search, UserPlus, ExternalLink, Loader2, X, Pencil, Trash2, Save } from "lucide-react";
 
 // 管理画面：録画配信 会員一覧
@@ -24,6 +25,7 @@ export default function ArchiveMembersPage() {
   const [formPhone, setFormPhone] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formAddress, setFormAddress] = useState("");
+  const [formGroup, setFormGroup] = useState<"a" | "b">("a");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [issued, setIssued] = useState<{ id: string; pw: string } | null>(null);
 
@@ -60,6 +62,7 @@ export default function ArchiveMembersPage() {
           phone: formPhone,
           email: formEmail,
           address: formAddress,
+          member_group: formGroup,
           confidentiality_agreed: true,
         }),
       });
@@ -74,6 +77,7 @@ export default function ArchiveMembersPage() {
       setFormPhone("");
       setFormEmail("");
       setFormAddress("");
+      setFormGroup("a");
       fetchMembers();
     } catch (err) {
       toast({
@@ -99,6 +103,7 @@ export default function ArchiveMembersPage() {
         email: editMember.email.trim(),
         address: editMember.address.trim(),
         password: editMember.password.trim(),
+        member_group: editMember.member_group,
         is_active: editMember.is_active,
       })
       .eq("id", editMember.id);
@@ -140,10 +145,11 @@ export default function ArchiveMembersPage() {
 
   // CSV出力
   const handleExportCsv = () => {
-    const header = "視聴ID,氏名,かな,電話番号,メール,住所,機密保持同意,登録日時";
+    const header = "視聴ID,流入元,氏名,かな,電話番号,メール,住所,機密保持同意,登録日時";
     const rows = filtered.map((m) =>
       [
         m.member_id,
+        archiveGroupLabel(m.member_group),
         m.name,
         m.name_kana,
         m.phone,
@@ -244,6 +250,20 @@ export default function ArchiveMembersPage() {
                     required
                   />
                 </div>
+                <div className="space-y-1.5">
+                  <Label>流入元 *</Label>
+                  <select
+                    value={formGroup}
+                    onChange={(e) => setFormGroup(e.target.value as "a" | "b")}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    {ARCHIVE_GROUPS.map((g) => (
+                      <option key={g} value={g}>
+                        {ARCHIVE_GROUP_LABELS[g]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* 発行されたID/PWの表示 */}
@@ -331,6 +351,22 @@ export default function ArchiveMembersPage() {
                   onChange={(e) => setEditMember({ ...editMember, password: e.target.value })}
                 />
               </div>
+              <div className="space-y-1.5">
+                <Label>流入元</Label>
+                <select
+                  value={editMember.member_group}
+                  onChange={(e) =>
+                    setEditMember({ ...editMember, member_group: e.target.value as "a" | "b" })
+                  }
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  {ARCHIVE_GROUPS.map((g) => (
+                    <option key={g} value={g}>
+                      {ARCHIVE_GROUP_LABELS[g]}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="flex items-end">
                 <label className="flex cursor-pointer items-center gap-2 text-sm">
                   <input
@@ -383,6 +419,7 @@ export default function ArchiveMembersPage() {
                 <thead>
                   <tr className="border-b text-left text-xs text-muted-foreground">
                     <th className="px-2 py-2">視聴ID</th>
+                    <th className="px-2 py-2">流入元</th>
                     <th className="px-2 py-2">氏名</th>
                     <th className="px-2 py-2">かな</th>
                     <th className="px-2 py-2">電話番号</th>
@@ -396,6 +433,17 @@ export default function ArchiveMembersPage() {
                   {filtered.map((m) => (
                     <tr key={m.id} className="border-b hover:bg-muted/50">
                       <td className="px-2 py-2 font-mono">{m.member_id}</td>
+                      <td className="px-2 py-2">
+                        <span
+                          className={`inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${
+                            m.member_group === "b"
+                              ? "bg-purple-500/10 text-purple-600"
+                              : "bg-teal-500/10 text-teal-600"
+                          }`}
+                        >
+                          {archiveGroupLabel(m.member_group)}
+                        </span>
+                      </td>
                       <td className="px-2 py-2">{m.name}</td>
                       <td className="px-2 py-2 text-muted-foreground">{m.name_kana}</td>
                       <td className="px-2 py-2">{m.phone}</td>
