@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { generateViewerId } from "@/lib/utils/kana-to-romaji";
+import { sendRegistrationEmail } from "@/lib/email";
 
 // 録画配信会員の登録
 export async function POST(request: NextRequest) {
@@ -82,6 +83,35 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       console.error("Archive register insert error:", insertError);
       return NextResponse.json({ error: "登録に失敗しました" }, { status: 500 });
+    }
+
+    // 登録完了の自動返信メールを送信（会員の流入元グループに応じた視聴ページURLを案内）
+    // メール送信の失敗は登録自体の成否に影響させない
+    try {
+      const group = member_group === "b" ? "b" : "a";
+      const groupKey = group === "b" ? "watch_page_url_b" : "watch_page_url_a";
+      const { data: settings } = await supabase
+        .from("archive_settings")
+        .select("key, value")
+        .in("key", [groupKey, "watch_page_url"]);
+      const settingMap: Record<string, string> = {};
+      (settings as { key: string; value: string }[] | null)?.forEach((s) => {
+        settingMap[s.key] = s.value;
+      });
+      const watchPageUrl =
+        settingMap[groupKey] ||
+        settingMap["watch_page_url"] ||
+        `${process.env.NEXT_PUBLIC_APP_URL || ""}/archive/login`;
+
+      await sendRegistrationEmail({
+        to: email.trim(),
+        name: name.trim(),
+        memberId,
+        password,
+        watchPageUrl,
+      });
+    } catch (mailErr) {
+      console.error("登録完了メールの送信処理でエラー:", mailErr);
     }
 
     return NextResponse.json({ member_id: memberId, password });
