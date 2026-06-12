@@ -209,6 +209,8 @@ export async function sendAdminNotificationEmail(
 
   const text = `録画配信に新しい会員登録がありました。
 
+BioVaultLive配信録画視聴機密保持ページ
+
 ──────────────────────
 ■ 流入元　： ${groupLabel}
 ■ 視聴ID　： ${memberId}
