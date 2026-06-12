@@ -47,6 +47,7 @@ export default function ArchiveVideoNewPage() {
   const [publishedAt, setPublishedAt] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
   const [maxViews, setMaxViews] = useState("3");
+  const [allowedGroups, setAllowedGroups] = useState<("a" | "b")[]>(["a", "b"]);
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -178,6 +179,7 @@ export default function ArchiveVideoNewPage() {
         published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
         max_views: parseInt(maxViews, 10) || 3,
+        allowed_groups: allowedGroups,
       });
       if (insertError) {
         throw new Error(
@@ -278,6 +280,33 @@ export default function ArchiveVideoNewPage() {
                 className="max-w-[120px]"
               />
             </div>
+            {/* 視聴可能グループ */}
+            <div className="space-y-2">
+              <Label>視聴可能グループ *</Label>
+              <div className="flex gap-4">
+                {(["a", "b"] as const).map((g) => (
+                  <label key={g} className="flex cursor-pointer items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={allowedGroups.includes(g)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setAllowedGroups((prev) => [...prev, g]);
+                        } else {
+                          setAllowedGroups((prev) => prev.filter((x) => x !== g));
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-border"
+                    />
+                    グループ {g.toUpperCase()}
+                  </label>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                どちらも選択しない場合は誰も視聴できません
+              </p>
+            </div>
+
             <div className="space-y-1.5">
               <Label htmlFor="file">動画ファイル *</Label>
               <Input

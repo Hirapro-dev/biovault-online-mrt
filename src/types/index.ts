@@ -84,6 +84,7 @@ export interface ArchiveMember {
   address: string;
   confidentiality_agreed: boolean;
   is_active: boolean;
+  member_group: "a" | "b"; // 登録フォームで振り分けられたグループ
   created_at: string;
 }
 
@@ -100,6 +101,7 @@ export interface ArchiveVideo {
   expires_at: string | null;
   max_views: number;
   is_active: boolean;
+  allowed_groups: ("a" | "b")[]; // 視聴可能なグループ（["a","b"] で両方）
   created_at: string;
 }
 

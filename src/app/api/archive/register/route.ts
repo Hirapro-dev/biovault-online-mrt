@@ -6,7 +6,7 @@ import { generateViewerId } from "@/lib/utils/kana-to-romaji";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, name_kana, phone, email, address, viewer_id, confidentiality_agreed } =
+    const { name, name_kana, phone, email, address, viewer_id, confidentiality_agreed, member_group } =
       body as {
         name?: string;
         name_kana?: string;
@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
         address?: string;
         viewer_id?: string;
         confidentiality_agreed?: boolean;
+        member_group?: "a" | "b";
       };
 
     // バリデーション
@@ -75,6 +76,7 @@ export async function POST(request: NextRequest) {
       email: email.trim(),
       address: address.trim(),
       confidentiality_agreed: true,
+      member_group: member_group === "b" ? "b" : "a",
     });
 
     if (insertError) {

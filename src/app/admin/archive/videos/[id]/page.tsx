@@ -55,6 +55,7 @@ export default function ArchiveVideoDetailPage() {
   const [publishedAt, setPublishedAt] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
   const [maxViews, setMaxViews] = useState("3");
+  const [allowedGroups, setAllowedGroups] = useState<("a" | "b")[]>(["a", "b"]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -76,6 +77,7 @@ export default function ArchiveVideoDetailPage() {
       setPublishedAt(toLocalInputValue(v.published_at));
       setExpiresAt(toLocalInputValue(v.expires_at));
       setMaxViews(String(v.max_views));
+      setAllowedGroups((v.allowed_groups ?? ["a", "b"]) as ("a" | "b")[]);
     }
     setViews((viewData as ViewWithMember[]) || []);
     setIsLoading(false);
@@ -124,6 +126,7 @@ export default function ArchiveVideoDetailPage() {
           published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
           expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
           max_views: parseInt(maxViews, 10) || 3,
+          allowed_groups: allowedGroups,
           ...(thumbnailR2Key ? { thumbnail_r2_key: thumbnailR2Key } : {}),
         })
         .eq("id", params.id);
@@ -282,6 +285,33 @@ export default function ArchiveVideoDetailPage() {
               />
             </div>
           </div>
+          {/* 視聴可能グループ */}
+          <div className="space-y-2">
+            <Label>視聴可能グループ</Label>
+            <div className="flex gap-4">
+              {(["a", "b"] as const).map((g) => (
+                <label key={g} className="flex cursor-pointer items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={allowedGroups.includes(g)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setAllowedGroups((prev) => [...prev, g]);
+                      } else {
+                        setAllowedGroups((prev) => prev.filter((x) => x !== g));
+                      }
+                    }}
+                    className="h-4 w-4 rounded border-border"
+                  />
+                  グループ {g.toUpperCase()}
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              選択したグループの会員のみ視聴できます
+            </p>
+          </div>
+
           <div className="space-y-1.5">
             <Label>サムネイル画像</Label>
             <Input
