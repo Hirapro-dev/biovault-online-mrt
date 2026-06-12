@@ -25,7 +25,7 @@ export function ArchiveHeader({ memberName }: { memberName: string | null }) {
         />
         <div className="flex items-center gap-3">
           {memberName && (
-            <span className="text-sm text-teal-400">{memberName} 様</span>
+            <span className="text-base text-teal-400">{memberName} 様</span>
           )}
           <Button
             variant="ghost"

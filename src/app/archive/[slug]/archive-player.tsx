@@ -145,7 +145,7 @@ export function ArchivePlayer({
             ) : (
               <div className="flex flex-col items-center gap-2 text-red-400">
                 <AlertCircle className="h-8 w-8" />
-                <p className="text-sm">現在この動画はご視聴いただけません</p>
+                <p className="text-base">現在この動画はご視聴いただけません</p>
               </div>
             )}
           </div>
@@ -153,7 +153,7 @@ export function ArchivePlayer({
       )}
 
       {error && (
-        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-center text-sm text-red-400">
+        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-center text-base text-red-400">
           {error}
         </div>
       )}

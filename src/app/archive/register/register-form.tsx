@@ -157,15 +157,15 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             <h1 className="bg-gradient-to-r from-teal-200 via-cyan-100 to-teal-200 bg-clip-text text-xl font-bold tracking-wide text-transparent">
               録画配信 視聴登録
             </h1>
-            <p className="mt-3 text-center text-sm text-slate-400">
+            <p className="mt-3 text-center text-base text-slate-400">
               機密保持契約にご同意のうえ、必要事項をご入力ください
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white">氏名</label>
-              <p className="text-[10px] leading-relaxed text-amber-300/80">
+              <label className="text-base font-medium text-white">氏名</label>
+              <p className="text-xs leading-relaxed text-amber-300/80">
                 苗字と名前にスペースを開けてください。視聴IDは苗字を自動算出できます
               </p>
               <Input
@@ -180,9 +180,9 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white">
+              <label className="text-base font-medium text-white">
                 ふりがな
-                <span className="ml-2 text-[10px] font-normal text-slate-500">
+                <span className="ml-2 text-xs font-normal text-slate-500">
                   ※氏名入力で自動反映されます
                 </span>
               </label>
@@ -196,7 +196,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white">電話番号</label>
+              <label className="text-base font-medium text-white">電話番号</label>
               <Input
                 type="tel"
                 inputMode="numeric"
@@ -210,9 +210,9 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white">
+              <label className="text-base font-medium text-white">
                 視聴ID
-                <span className="ml-2 text-[10px] font-normal text-slate-500">
+                <span className="ml-2 text-xs font-normal text-slate-500">
                   ※自動生成されます（手入力での変更も可能）
                 </span>
               </label>
@@ -225,7 +225,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-white">メールアドレス</label>
+              <label className="text-base font-medium text-white">メールアドレス</label>
               <Input
                 type="email"
                 value={email}
@@ -237,9 +237,9 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             </div>
 
             <div className="space-y-3">
-              <p className="text-xs font-medium text-white">現住所</p>
+              <p className="text-base font-medium text-white">現住所</p>
               <div className="space-y-1.5">
-                <label className="text-xs text-slate-400">郵便番号</label>
+                <label className="text-base text-slate-400">郵便番号</label>
                 <div className="relative">
                   <Input
                     type="tel"
@@ -257,9 +257,9 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs text-slate-400">
+                <label className="text-base text-slate-400">
                   住所1
-                  <span className="ml-2 text-[10px] text-slate-600">
+                  <span className="ml-2 text-xs text-slate-600">
                     ※郵便番号入力で自動反映
                   </span>
                 </label>
@@ -272,7 +272,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs text-slate-400">住所2</label>
+                <label className="text-base text-slate-400">住所2</label>
                 <Input
                   value={address2}
                   onChange={(e) => setAddress2(e.target.value)}
@@ -284,11 +284,11 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
             {/* 機密保持契約 */}
             <div className="space-y-3 pt-2">
-              <p className="text-xs font-semibold text-amber-300">*機密保持契約</p>
-              <p className="text-xs text-white">
+              <p className="text-sm font-semibold text-amber-300">*機密保持契約</p>
+              <p className="text-sm text-white">
                 この録画配信には機密情報が含まれています。以下の機密保持契約内容をご確認ください。
               </p>
-              <div className="h-40 overflow-y-auto rounded-lg border border-teal-500/15 bg-[#0d1520]/80 p-3 text-xs leading-relaxed text-slate-400">
+              <div className="h-40 overflow-y-auto rounded-lg border border-teal-500/15 bg-[#0d1520]/80 p-3 text-sm leading-relaxed text-slate-400">
                 <p className="mb-2">株式会社MRT（以下「甲」という。）と録画配信視聴者（以下「乙」という。）は，乙が甲から開示された情報（以下「機密情報」という。）の取扱いについて次のとおり契約（以下「本契約」という。）を締結する。</p>
                 <p className="mb-1 font-semibold text-slate-300">第１条（機密情報）</p>
                 <p className="mb-2">本契約において機密情報とは，甲が乙に対して，書面，口頭，電子メールその他方法を問わず開示した技術上または営業上の情報をいう。ただし，次の各号の一に該当する情報については，機密情報に含まれない。<br />・甲から開示を受けた時点で既に公知であった情報<br />・乙が正当な権限を有する第三者から機密保持義務を負うことなく取得した情報<br />・甲から開示を受けた後，乙の責に帰すべき事由によらないで公知になった情報</p>
@@ -318,12 +318,12 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                   onCheckedChange={(v) => setAgreed(v === true)}
                   className="border-teal-500/40 data-[state=checked]:border-teal-600 data-[state=checked]:bg-teal-600"
                 />
-                <span className="select-none text-xs text-slate-300">機密保持契約に同意する</span>
+                <span className="select-none text-sm text-slate-300">機密保持契約に同意する</span>
               </label>
             </div>
 
             {error && (
-              <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-center text-sm text-red-400">
+              <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-center text-base text-red-400">
                 {error}
               </div>
             )}
@@ -346,7 +346,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         </div>
       </div>
 
-      <p className="mt-6 text-center text-[10px] text-white/40">
+      <p className="mt-6 text-center text-xs text-white/40">
         © MRT inc. All rights reserved.
       </p>
     </div>

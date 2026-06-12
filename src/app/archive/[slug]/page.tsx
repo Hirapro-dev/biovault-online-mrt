@@ -83,14 +83,14 @@ export default async function ArchiveWatchPage({
           {v.title}
         </h1>
         {v.description && (
-          <p className="mb-6 text-sm text-slate-400">{v.description}</p>
+          <p className="mb-6 text-base text-slate-400">{v.description}</p>
         )}
 
         {notYetPublished ? (
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-12 text-center text-amber-300">
             この動画はまだ公開されていません
             {v.published_at && (
-              <p className="mt-2 text-sm text-slate-400">
+              <p className="mt-2 text-base text-slate-400">
                 公開開始: {new Date(v.published_at).toLocaleString("ja-JP")}
               </p>
             )}
@@ -109,10 +109,10 @@ export default async function ArchiveWatchPage({
 
         {/* 注意事項 */}
         <div className="mt-10 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-300">
+          <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-amber-300">
             <span>⚠</span> 注意事項
           </h2>
-          <ul className="space-y-2 text-xs leading-relaxed text-slate-300">
+          <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
             <li className="flex gap-2">
               <span className="mt-0.5 shrink-0 text-amber-400">•</span>
               本動画に含まれる情報は機密情報です。視聴者本人以外への開示・漏えいは一切禁止されています。
@@ -138,13 +138,13 @@ export default async function ArchiveWatchPage({
 
         {/* 機密保持契約全文（アコーディオン） */}
         <details className="mt-4 rounded-xl border border-teal-500/15 bg-[#0d1520]/60">
-          <summary className="cursor-pointer select-none px-5 py-4 text-xs font-semibold text-teal-300 hover:text-teal-200 [&::-webkit-details-marker]:hidden">
+          <summary className="cursor-pointer select-none px-5 py-4 text-sm font-semibold text-teal-300 hover:text-teal-200 [&::-webkit-details-marker]:hidden">
             <span className="flex items-center justify-between">
               <span>機密保持契約 全文を確認する</span>
               <span className="text-slate-500">▼</span>
             </span>
           </summary>
-          <div className="border-t border-teal-500/10 px-5 py-4 text-xs leading-relaxed text-slate-400">
+          <div className="border-t border-teal-500/10 px-5 py-4 text-sm leading-relaxed text-slate-400">
             <p className="mb-3">株式会社MRT（以下「甲」という。）と録画配信視聴者（以下「乙」という。）は，乙が甲から開示された情報（以下「機密情報」という。）の取扱いについて次のとおり契約（以下「本契約」という。）を締結する。</p>
             <p className="mb-1 font-semibold text-slate-300">第１条（機密情報）</p>
             <p className="mb-3">本契約において機密情報とは，甲が乙に対して，書面，口頭，電子メールその他方法を問わず開示した技術上または営業上の情報をいう。ただし，次の各号の一に該当する情報については，機密情報に含まれない。<br />・甲から開示を受けた時点で既に公知であった情報<br />・乙が正当な権限を有する第三者から機密保持義務を負うことなく取得した情報<br />・甲から開示を受けた後，乙の責に帰すべき事由によらないで公知になった情報</p>
