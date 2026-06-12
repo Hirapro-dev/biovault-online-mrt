@@ -30,39 +30,52 @@ function getVideoStatus(video: ArchiveVideo): {
 export default function ArchiveVideosPage() {
   const { toast } = useToast();
   const [videos, setVideos] = useState<ArchiveVideo[]>([]);
-  const [watchPageUrl, setWatchPageUrl] = useState("");
+  // 植田版(A)・上田版(B)それぞれの視聴ページURL
+  const [watchPageUrlA, setWatchPageUrlA] = useState("");
+  const [watchPageUrlB, setWatchPageUrlB] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingUrl, setIsSavingUrl] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const supabase = createClient();
-      const [{ data: videoData }, { data: setting }] = await Promise.all([
+      const [{ data: videoData }, { data: settings }] = await Promise.all([
         supabase
           .from("archive_videos")
           .select("*")
           .order("created_at", { ascending: false }),
         supabase
           .from("archive_settings")
-          .select("value")
-          .eq("key", "watch_page_url")
-          .single(),
+          .select("key, value")
+          .in("key", ["watch_page_url", "watch_page_url_a", "watch_page_url_b"]),
       ]);
       setVideos((videoData as ArchiveVideo[]) || []);
-      setWatchPageUrl(setting?.value || "");
+
+      // 設定値をマップ化（旧 watch_page_url を両グループのフォールバックに利用）
+      const map: Record<string, string> = {};
+      (settings as { key: string; value: string }[] | null)?.forEach((s) => {
+        map[s.key] = s.value;
+      });
+      const legacy = map["watch_page_url"] || "";
+      setWatchPageUrlA(map["watch_page_url_a"] ?? legacy);
+      setWatchPageUrlB(map["watch_page_url_b"] ?? legacy);
       setIsLoading(false);
     }
     fetchData();
   }, []);
 
-  // サンクスページに表示する視聴ページURLを保存
+  // グループ別の視聴ページURLを保存（upsertで未作成キーにも対応）
   const handleSaveUrl = async () => {
     setIsSavingUrl(true);
     const supabase = createClient();
-    const { error } = await supabase
-      .from("archive_settings")
-      .update({ value: watchPageUrl, updated_at: new Date().toISOString() })
-      .eq("key", "watch_page_url");
+    const now = new Date().toISOString();
+    const { error } = await supabase.from("archive_settings").upsert(
+      [
+        { key: "watch_page_url_a", value: watchPageUrlA, updated_at: now },
+        { key: "watch_page_url_b", value: watchPageUrlB, updated_at: now },
+      ],
+      { onConflict: "key" }
+    );
     setIsSavingUrl(false);
     if (error) {
       toast({ title: "保存に失敗しました", variant: "destructive" });
@@ -83,20 +96,35 @@ export default function ArchiveVideosPage() {
         </Link>
       </div>
 
-      {/* 視聴ページURL設定（ログイン後の遷移先・サンクスページ共通） */}
+      {/* 視聴ページURL設定（グループ別・ログイン後の遷移先・サンクスページ共通） */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">動画視聴ページURL</CardTitle>
+          <CardTitle className="text-base">動画視聴ページURL（グループ別）</CardTitle>
           <p className="text-xs text-muted-foreground">
-            ログイン後の遷移先、およびサンクスページの「視聴ページへ進む」ボタンの遷移先に使われます。
+            ログイン後の遷移先、およびサンクスページの「視聴ページへ進む」ボタンの遷移先に使われます。会員の流入元グループに応じて自動で切り替わります。
           </p>
         </CardHeader>
-        <CardContent className="flex gap-2">
-          <Input
-            value={watchPageUrl}
-            onChange={(e) => setWatchPageUrl(e.target.value)}
-            placeholder="https://bvlive.mrt.co.jp/archive/00001 など"
-          />
+        <CardContent className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">
+              {ARCHIVE_GROUP_LABELS.a}（グループA）の視聴ページURL
+            </label>
+            <Input
+              value={watchPageUrlA}
+              onChange={(e) => setWatchPageUrlA(e.target.value)}
+              placeholder="https://bvlive.mrt.co.jp/archive/00001 など"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">
+              {ARCHIVE_GROUP_LABELS.b}（グループB）の視聴ページURL
+            </label>
+            <Input
+              value={watchPageUrlB}
+              onChange={(e) => setWatchPageUrlB(e.target.value)}
+              placeholder="https://bvlive.mrt.co.jp/archive/00002 など"
+            />
+          </div>
           <Button onClick={handleSaveUrl} disabled={isSavingUrl} className="gap-2">
             <Save className="h-4 w-4" />
             保存

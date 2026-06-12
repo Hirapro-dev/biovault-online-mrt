@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const supabase = createServiceRoleClient();
     const { data: member, error } = await supabase
       .from("archive_members")
-      .select("member_id, password, name, is_active")
+      .select("member_id, password, name, is_active, member_group")
       .eq("member_id", member_id.trim())
       .single();
 
@@ -42,13 +42,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ログイン後の遷移先（管理画面で設定した動画視聴ページURL）を取得
-    const { data: setting } = await supabase
+    // ログイン後の遷移先（会員の流入元グループに対応する視聴ページURL）を取得
+    // グループ別URL → 旧共通URL → デフォルトの順でフォールバック
+    const groupKey = member.member_group === "b" ? "watch_page_url_b" : "watch_page_url_a";
+    const { data: settings } = await supabase
       .from("archive_settings")
-      .select("value")
-      .eq("key", "watch_page_url")
-      .single();
-    const redirectUrl = setting?.value || "/archive";
+      .select("key, value")
+      .in("key", [groupKey, "watch_page_url"]);
+    const settingMap: Record<string, string> = {};
+    (settings as { key: string; value: string }[] | null)?.forEach((s) => {
+      settingMap[s.key] = s.value;
+    });
+    const redirectUrl =
+      settingMap[groupKey] || settingMap["watch_page_url"] || "/archive";
 
     // セッションクッキーを発行
     const token = createSessionToken(member.member_id);
