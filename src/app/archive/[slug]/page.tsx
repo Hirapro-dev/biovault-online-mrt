@@ -138,7 +138,7 @@ export default async function ArchiveWatchPage({
 
         {/* 機密保持契約全文（アコーディオン） */}
         <details className="mt-4 rounded-xl border border-teal-500/15 bg-[#0d1520]/60">
-          <summary className="cursor-pointer select-none px-5 py-4 text-sm font-semibold text-teal-300 hover:text-teal-200 [&::-webkit-details-marker]:hidden">
+          <summary className="cursor-pointer select-none list-none px-5 py-4 text-sm font-semibold text-teal-300 hover:text-teal-200 [&::-webkit-details-marker]:hidden [&::marker]:hidden">
             <span className="flex items-center justify-between">
               <span>機密保持契約 全文を確認する</span>
               <span className="text-slate-500">▼</span>
