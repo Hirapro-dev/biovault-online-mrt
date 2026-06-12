@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { generateViewerId } from "@/lib/utils/kana-to-romaji";
-import { sendRegistrationEmail } from "@/lib/email";
+import { sendRegistrationEmail, sendAdminNotificationEmail } from "@/lib/email";
+import { archiveGroupLabel } from "@/lib/archive-group";
 
 // 録画配信会員の登録
 export async function POST(request: NextRequest) {
@@ -103,15 +104,27 @@ export async function POST(request: NextRequest) {
         settingMap["watch_page_url"] ||
         `${process.env.NEXT_PUBLIC_APP_URL || ""}/archive/login`;
 
-      await sendRegistrationEmail({
-        to: email.trim(),
-        name: name.trim(),
-        memberId,
-        password,
-        watchPageUrl,
-      });
+      // 会員への自動返信と管理者への通知を並行送信
+      await Promise.all([
+        sendRegistrationEmail({
+          to: email.trim(),
+          name: name.trim(),
+          memberId,
+          password,
+          watchPageUrl,
+        }),
+        sendAdminNotificationEmail({
+          name: name.trim(),
+          nameKana: name_kana.trim(),
+          phone: phone!.trim(),
+          email: email.trim(),
+          address: address.trim(),
+          memberId,
+          groupLabel: archiveGroupLabel(group),
+        }),
+      ]);
     } catch (mailErr) {
-      console.error("登録完了メールの送信処理でエラー:", mailErr);
+      console.error("登録メールの送信処理でエラー:", mailErr);
     }
 
     return NextResponse.json({ member_id: memberId, password });

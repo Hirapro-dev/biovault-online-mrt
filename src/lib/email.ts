@@ -6,6 +6,7 @@
  *   SES_SECRET_ACCESS_KEY   SES送信用のIAMシークレットキー
  *   MAIL_FROM               送信元アドレス（例: no-reply@mrt.co.jp）
  *   MAIL_FROM_NAME          送信元表示名（任意・例: BioVault録画配信）
+ *   MAIL_ADMIN_TO           管理者通知メールの宛先（カンマ区切りで複数可）
  */
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
@@ -35,8 +36,8 @@ export function isEmailConfigured(): boolean {
 interface SendEmailParams {
   to: string;
   subject: string;
-  html: string;
   text: string;
+  html?: string; // 省略時はテキストのみのメール
 }
 
 // メール送信（SES未設定時は false を返して呼び出し側で握りつぶす）
@@ -55,16 +56,22 @@ export async function sendEmail({
   const fromAddress = process.env.MAIL_FROM!;
   // 表示名に日本語を含むためRFC 2047形式でエンコード
   const source = `=?UTF-8?B?${Buffer.from(fromName).toString("base64")}?= <${fromAddress}>`;
+  // 宛先はカンマ区切りで複数指定に対応
+  const toAddresses = to
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean);
 
   try {
     await getSesClient().send(
       new SendEmailCommand({
         Source: source,
-        Destination: { ToAddresses: [to] },
+        Destination: { ToAddresses: toAddresses },
         Message: {
           Subject: { Data: subject, Charset: "UTF-8" },
           Body: {
-            Html: { Data: html, Charset: "UTF-8" },
+            // htmlがある場合のみHTMLパートを付与
+            ...(html ? { Html: { Data: html, Charset: "UTF-8" } } : {}),
             Text: { Data: text, Charset: "UTF-8" },
           },
         },
@@ -173,4 +180,45 @@ export async function sendRegistrationEmail(
 </html>`;
 
   return sendEmail({ to, subject, html, text });
+}
+
+interface AdminNotificationParams {
+  name: string;
+  nameKana: string;
+  phone: string;
+  email: string;
+  address: string;
+  memberId: string;
+  groupLabel: string; // 流入元の表示名（植田版 / 上田版）
+}
+
+// 管理者へ新規登録の通知メールを送信（テキストのみ）
+// 宛先は環境変数 MAIL_ADMIN_TO（カンマ区切りで複数可）
+export async function sendAdminNotificationEmail(
+  params: AdminNotificationParams
+): Promise<boolean> {
+  const adminTo = process.env.MAIL_ADMIN_TO;
+  if (!adminTo) {
+    console.warn("MAIL_ADMIN_TO が未設定のため管理者通知をスキップしました");
+    return false;
+  }
+
+  const { name, nameKana, phone, email, address, memberId, groupLabel } = params;
+  const subject = `【録画配信】新規登録: ${name} 様（${groupLabel}）`;
+
+  const text = `録画配信に新しい会員登録がありました。
+
+──────────────────────
+■ 流入元　： ${groupLabel}
+■ 視聴ID　： ${memberId}
+■ 氏名　　： ${name}
+■ ふりがな： ${nameKana}
+■ 電話番号： ${phone}
+■ メール　： ${email}
+■ 住所　　： ${address}
+──────────────────────
+
+会員一覧: 管理画面 → 録画配信 会員一覧 でご確認いただけます。`;
+
+  return sendEmail({ to: adminTo, subject, text });
 }
