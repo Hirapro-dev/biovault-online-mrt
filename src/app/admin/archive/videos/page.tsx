@@ -155,7 +155,6 @@ export default function ArchiveVideosPage() {
                     <th className="px-2 py-2">状態</th>
                     <th className="px-2 py-2">公開開始</th>
                     <th className="px-2 py-2">公開終了</th>
-                    <th className="px-2 py-2">上限回数</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,7 +191,6 @@ export default function ArchiveVideosPage() {
                             ? new Date(video.expires_at).toLocaleString("ja-JP")
                             : "無期限"}
                         </td>
-                        <td className="px-2 py-2">{video.max_views}回</td>
                       </tr>
                     );
                   })}

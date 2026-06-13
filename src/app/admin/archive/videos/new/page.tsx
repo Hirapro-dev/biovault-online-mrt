@@ -47,7 +47,6 @@ export default function ArchiveVideoNewPage() {
   const [description, setDescription] = useState("");
   const [publishedAt, setPublishedAt] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
-  const [maxViews, setMaxViews] = useState("3");
   const [allowedGroups, setAllowedGroups] = useState<("a" | "b")[]>(["a", "b"]);
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -179,7 +178,6 @@ export default function ArchiveVideoNewPage() {
         thumbnail_r2_key: thumbnailR2Key,
         published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-        max_views: parseInt(maxViews, 10) || 3,
         allowed_groups: allowedGroups,
       });
       if (insertError) {
@@ -270,16 +268,8 @@ export default function ArchiveVideoNewPage() {
                 <p className="text-xs text-muted-foreground">未設定の場合は無期限</p>
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="maxViews">1会員あたりの視聴回数上限</Label>
-              <Input
-                id="maxViews"
-                type="number"
-                min="1"
-                value={maxViews}
-                onChange={(e) => setMaxViews(e.target.value)}
-                className="max-w-[120px]"
-              />
+            <div className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              視聴制限：会員が初回再生してから72時間で視聴不可になります（自動）。
             </div>
             {/* 視聴可能グループ */}
             <div className="space-y-2">

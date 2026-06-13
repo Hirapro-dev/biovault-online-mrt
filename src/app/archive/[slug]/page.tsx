@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { getArchiveMemberId, isAdminSession } from "@/lib/archive-auth";
 import { createPlaybackUrl } from "@/lib/r2";
+import { calcAccessDeadline, isAccessExpired } from "@/lib/archive-access";
 import type { ArchiveVideo } from "@/types";
 import { ArchivePlayer } from "./archive-player";
 import { ArchiveHeader } from "./archive-header";
@@ -48,19 +49,23 @@ export default async function ArchiveWatchPage({
   const notYetPublished = v.published_at && new Date(v.published_at) > now;
   const expired = v.expires_at && new Date(v.expires_at) < now;
 
-  // 自分の視聴回数を取得（管理者は回数制限なし）
+  // 自分の初回再生時刻を取得（視聴期限の判定に使用。管理者は期限なし）
   const { data: view } = memberId
     ? await supabase
         .from("archive_views")
-        .select("view_count")
+        .select("first_viewed_at")
         .eq("member_id", memberId)
         .eq("video_id", v.id)
         .maybeSingle()
     : { data: null };
 
-  const remaining = isAdmin
-    ? v.max_views
-    : Math.max(0, v.max_views - (view?.view_count ?? 0));
+  const firstViewedAt: string | null = view?.first_viewed_at ?? null;
+  // 視聴期限（初回再生 + 72時間）と、期限切れか否か
+  const accessExpired = !isAdmin && isAccessExpired(firstViewedAt, now);
+  const accessDeadline =
+    firstViewedAt && !isAdmin
+      ? calcAccessDeadline(firstViewedAt).toISOString()
+      : null;
 
   // サムネイルの署名付きURL（再生前の表示用）
   let thumbnailUrl: string | null = null;
@@ -102,7 +107,8 @@ export default async function ArchiveWatchPage({
         ) : (
           <ArchivePlayer
             videoId={v.id}
-            initialRemaining={remaining}
+            initialExpired={accessExpired}
+            initialDeadline={accessDeadline}
             thumbnailUrl={thumbnailUrl}
           />
         )}

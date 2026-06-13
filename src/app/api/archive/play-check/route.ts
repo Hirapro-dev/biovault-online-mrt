@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { getArchiveMemberId, isAdminSession } from "@/lib/archive-auth";
 import { createPlaybackUrl } from "@/lib/r2";
+import { calcAccessDeadline, isAccessExpired } from "@/lib/archive-access";
 
-// 再生前チェック：視聴回数の確認 → 署名付きURL発行 + 回数カウントアップ
+// 再生前チェック：視聴期限（初回再生から72時間）の確認 → 署名付きURL発行
 export async function POST(request: NextRequest) {
   try {
     // 認証チェック（会員 or 管理者）
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     // 動画の存在・公開期間チェック
     const { data: video, error: videoError } = await supabase
       .from("archive_videos")
-      .select("id, r2_key, published_at, expires_at, max_views, is_active")
+      .select("id, r2_key, published_at, expires_at, is_active")
       .eq("id", video_id)
       .single();
 
@@ -42,34 +43,41 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 管理者は回数を消費せずに再生可能
+    // 管理者は視聴期限なしで再生可能
     if (isAdmin) {
       const playbackUrl = await createPlaybackUrl(video.r2_key);
-      return NextResponse.json({ url: playbackUrl, remaining: video.max_views });
+      return NextResponse.json({ url: playbackUrl, expiresAt: null });
     }
 
-    // 視聴回数チェック
+    // 視聴期限チェック（初回再生から72時間）
     const { data: view } = await supabase
       .from("archive_views")
-      .select("id, view_count")
+      .select("id, view_count, first_viewed_at")
       .eq("member_id", memberId)
       .eq("video_id", video_id)
       .maybeSingle();
 
-    const currentCount = view?.view_count ?? 0;
-    if (currentCount >= video.max_views) {
+    // 既に初回再生済みで、72時間を過ぎている場合は視聴不可
+    if (view?.first_viewed_at && isAccessExpired(view.first_viewed_at, now)) {
       return NextResponse.json(
-        { error: "現在この動画はご視聴いただけません", remaining: 0 },
+        { error: "視聴可能期間（初回再生から72時間）が終了しました", expired: true },
         { status: 403 }
       );
     }
 
-    // 視聴回数をインクリメント（レコードがなければ作成）
     const nowIso = now.toISOString();
+    // 初回再生時刻：既存があれば維持、無ければ今回を初回とする
+    const firstViewedAt = view?.first_viewed_at ?? nowIso;
+
     if (view) {
       const { error: updateError } = await supabase
         .from("archive_views")
-        .update({ view_count: currentCount + 1, last_viewed_at: nowIso })
+        .update({
+          view_count: (view.view_count ?? 0) + 1,
+          last_viewed_at: nowIso,
+          // 初回再生時刻が未設定の場合のみ記録（既存は変更しない）
+          ...(view.first_viewed_at ? {} : { first_viewed_at: nowIso }),
+        })
         .eq("id", view.id);
       if (updateError) throw updateError;
     } else {
@@ -78,6 +86,7 @@ export async function POST(request: NextRequest) {
         video_id,
         view_count: 1,
         last_viewed_at: nowIso,
+        first_viewed_at: nowIso,
       });
       if (insertError) throw insertError;
     }
@@ -93,7 +102,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       url: playbackUrl,
-      remaining: video.max_views - currentCount - 1,
+      // 視聴期限（初回再生 + 72時間）をクライアントに通知
+      expiresAt: calcAccessDeadline(firstViewedAt).toISOString(),
     });
   } catch (err) {
     console.error("Play check error:", err);

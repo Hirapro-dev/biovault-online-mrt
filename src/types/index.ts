@@ -112,6 +112,7 @@ export interface ArchiveView {
   video_id: string;
   view_count: number;
   total_watch_seconds: number | null;
+  first_viewed_at: string | null; // 初回再生時刻（視聴期限の起点）
   last_viewed_at: string | null;
   created_at: string;
 }

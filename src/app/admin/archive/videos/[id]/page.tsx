@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ARCHIVE_GROUPS, ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
+import { calcAccessDeadline } from "@/lib/archive-access";
 import { ArrowLeft, Save, Trash2, Copy, Check, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
@@ -55,7 +56,6 @@ export default function ArchiveVideoDetailPage() {
   const [description, setDescription] = useState("");
   const [publishedAt, setPublishedAt] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
-  const [maxViews, setMaxViews] = useState("3");
   const [allowedGroups, setAllowedGroups] = useState<("a" | "b")[]>(["a", "b"]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
@@ -77,7 +77,6 @@ export default function ArchiveVideoDetailPage() {
       setDescription(v.description || "");
       setPublishedAt(toLocalInputValue(v.published_at));
       setExpiresAt(toLocalInputValue(v.expires_at));
-      setMaxViews(String(v.max_views));
       setAllowedGroups((v.allowed_groups ?? ["a", "b"]) as ("a" | "b")[]);
     }
     setViews((viewData as ViewWithMember[]) || []);
@@ -126,7 +125,6 @@ export default function ArchiveVideoDetailPage() {
           description: description.trim() || null,
           published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
           expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-          max_views: parseInt(maxViews, 10) || 3,
           allowed_groups: allowedGroups,
           ...(thumbnailR2Key ? { thumbnail_r2_key: thumbnailR2Key } : {}),
         })
@@ -259,7 +257,7 @@ export default function ArchiveVideoDetailPage() {
               rows={3}
             />
           </div>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label>公開開始日時</Label>
               <Input
@@ -274,15 +272,6 @@ export default function ArchiveVideoDetailPage() {
                 type="datetime-local"
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>視聴回数上限</Label>
-              <Input
-                type="number"
-                min="1"
-                value={maxViews}
-                onChange={(e) => setMaxViews(e.target.value)}
               />
             </div>
           </div>
@@ -351,6 +340,7 @@ export default function ArchiveVideoDetailPage() {
                     <th className="px-2 py-2">視聴ID</th>
                     <th className="px-2 py-2">氏名</th>
                     <th className="px-2 py-2">再生回数</th>
+                    <th className="px-2 py-2">視聴期限</th>
                     <th className="px-2 py-2">合計視聴時間</th>
                     <th className="px-2 py-2">最終視聴日時</th>
                   </tr>
@@ -360,8 +350,22 @@ export default function ArchiveVideoDetailPage() {
                     <tr key={v.id} className="border-b hover:bg-muted/50">
                       <td className="px-2 py-2 font-mono">{v.member_id}</td>
                       <td className="px-2 py-2">{v.archive_members?.name || "—"}</td>
-                      <td className="px-2 py-2">
-                        {v.view_count} / {video.max_views}回
+                      <td className="px-2 py-2">{v.view_count}回</td>
+                      <td className="whitespace-nowrap px-2 py-2">
+                        {v.first_viewed_at ? (
+                          (() => {
+                            const deadline = calcAccessDeadline(v.first_viewed_at);
+                            const expired = deadline.getTime() < Date.now();
+                            return (
+                              <span className={expired ? "text-red-500" : "text-muted-foreground"}>
+                                {deadline.toLocaleString("ja-JP")}
+                                {expired && "（終了）"}
+                              </span>
+                            );
+                          })()
+                        ) : (
+                          <span className="text-muted-foreground">未再生</span>
+                        )}
                       </td>
                       <td className="px-2 py-2">{formatSeconds(v.total_watch_seconds)}</td>
                       <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
