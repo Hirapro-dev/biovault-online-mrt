@@ -5,12 +5,19 @@ import { createClient } from "@/lib/supabase/client";
 import type { ArchiveView } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
 import { Download } from "lucide-react";
 
 // 結合済みの視聴ログ行
 interface LogRow extends ArchiveView {
   archive_members: { name: string } | null;
-  archive_videos: { title: string } | null;
+  archive_videos: { title: string; allowed_groups: ("a" | "b")[] | null } | null;
+}
+
+// 動画の公開対象グループを表示名（植田版・上田版）に変換
+function formatAllowedGroups(groups: ("a" | "b")[] | null | undefined): string {
+  if (!groups || groups.length === 0) return "—";
+  return groups.map((g) => ARCHIVE_GROUP_LABELS[g]).join("・");
 }
 
 // 秒数を「○時間○分」形式に変換
@@ -35,7 +42,7 @@ export default function ArchiveLogsPage() {
       const supabase = createClient();
       const { data } = await supabase
         .from("archive_views")
-        .select("*, archive_members(name), archive_videos(title)")
+        .select("*, archive_members(name), archive_videos(title, allowed_groups)")
         .order("last_viewed_at", { ascending: false });
       setLogs((data as LogRow[]) || []);
       setIsLoading(false);
@@ -64,12 +71,13 @@ export default function ArchiveLogsPage() {
 
   // CSV出力
   const handleExportCsv = () => {
-    const header = "視聴ID,会員名,動画タイトル,再生回数,合計視聴時間(秒),最終視聴日時";
+    const header = "視聴ID,会員名,動画タイトル,公開対象,再生回数,合計視聴時間(秒),最終視聴日時";
     const rows = filtered.map((l) =>
       [
         l.member_id,
         l.archive_members?.name || "",
         `"${(l.archive_videos?.title || "").replace(/"/g, '""')}"`,
+        formatAllowedGroups(l.archive_videos?.allowed_groups),
         l.view_count,
         l.total_watch_seconds ?? 0,
         l.last_viewed_at ? new Date(l.last_viewed_at).toLocaleString("ja-JP") : "",
@@ -146,6 +154,7 @@ export default function ArchiveLogsPage() {
                     <th className="px-2 py-2">視聴ID</th>
                     <th className="px-2 py-2">会員名</th>
                     <th className="px-2 py-2">動画</th>
+                    <th className="px-2 py-2">公開対象</th>
                     <th className="px-2 py-2">再生回数</th>
                     <th className="px-2 py-2">合計視聴時間</th>
                     <th className="px-2 py-2">最終視聴日時</th>
@@ -157,6 +166,9 @@ export default function ArchiveLogsPage() {
                       <td className="px-2 py-2 font-mono">{l.member_id}</td>
                       <td className="px-2 py-2">{l.archive_members?.name || "—"}</td>
                       <td className="px-2 py-2">{l.archive_videos?.title || "—"}</td>
+                      <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
+                        {formatAllowedGroups(l.archive_videos?.allowed_groups)}
+                      </td>
                       <td className="px-2 py-2">{l.view_count}回</td>
                       <td className="px-2 py-2">{formatSeconds(l.total_watch_seconds)}</td>
                       <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
