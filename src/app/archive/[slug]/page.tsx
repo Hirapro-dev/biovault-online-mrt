@@ -2,7 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { getArchiveMemberId, isAdminSession } from "@/lib/archive-auth";
 import { createPlaybackUrl } from "@/lib/r2";
-import { calcAccessDeadline, isAccessExpired } from "@/lib/archive-access";
+import { isAccessExpired } from "@/lib/archive-access";
 import type { ArchiveVideo } from "@/types";
 import { ArchivePlayer } from "./archive-player";
 import { ArchiveHeader } from "./archive-header";
@@ -60,12 +60,8 @@ export default async function ArchiveWatchPage({
     : { data: null };
 
   const firstViewedAt: string | null = view?.first_viewed_at ?? null;
-  // 視聴期限（初回再生 + 72時間）と、期限切れか否か
+  // 視聴期限切れか否か（初回再生 + 72時間）
   const accessExpired = !isAdmin && isAccessExpired(firstViewedAt, now);
-  const accessDeadline =
-    firstViewedAt && !isAdmin
-      ? calcAccessDeadline(firstViewedAt).toISOString()
-      : null;
 
   // サムネイルの署名付きURL（再生前の表示用）
   let thumbnailUrl: string | null = null;
@@ -108,7 +104,6 @@ export default async function ArchiveWatchPage({
           <ArchivePlayer
             videoId={v.id}
             initialExpired={accessExpired}
-            initialDeadline={accessDeadline}
             thumbnailUrl={thumbnailUrl}
           />
         )}
