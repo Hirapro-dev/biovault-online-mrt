@@ -165,9 +165,6 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-white">氏名</label>
-              <p className="text-xs leading-relaxed text-amber-300/80">
-                苗字と名前にスペースを開けてください。視聴IDは苗字を自動算出できます
-              </p>
               <Input
                 defaultValue=""
                 onChange={handleNameChange}
