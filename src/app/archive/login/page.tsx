@@ -45,22 +45,22 @@ export default function ArchiveLoginPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
-      {/* ヒーロー：register/a と同じCSS構造（下端ボーダー全幅・内側640px） */}
-      <div className="relative border-b border-teal-400/40 bg-[#050a0e]">
-        <div className="relative mx-auto h-[200px] w-full max-w-[640px] overflow-hidden sm:h-[260px]">
+      {/* ヒーロー（ボーダーなし・内側640px・右人物・左テキスト＋コピー） */}
+      <div className="relative bg-[#050a0e]">
+        <div className="relative mx-auto h-[320px] w-full max-w-[640px] overflow-hidden">
           {/* 人物画像（右側に配置・上寄せ） */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/nagashima_black02.png"
             alt=""
-            className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
+            className="absolute right-0 top-0 h-full w-[48%] object-cover object-top"
           />
           {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[52%] to-transparent to-[66%]" />
 
-          {/* 左寄せのテキスト */}
-          <div className="absolute inset-0 flex flex-col justify-center px-6">
-            <div className="mb-5">
+          {/* 左寄せのテキスト（コピーまでヒーロー内に） */}
+          <div className="absolute inset-0 flex flex-col justify-center pl-6 pr-[44%]">
+            <div className="mb-4">
               <div className="font-serif text-[20px] tracking-wide text-white">
                 BioVault
               </div>
@@ -69,23 +69,21 @@ export default function ArchiveLoginPage() {
               </div>
             </div>
             <h1 className="font-serif text-[24px] font-bold leading-[1.3] text-white">
-              録画配信 ログイン
+              Live配信映像視聴
+              <br />
+              ログインページ
             </h1>
+            <p className="mt-3 text-sm leading-relaxed text-slate-300">
+              登録したメールアドレスとパスワードを入力してください。
+            </p>
           </div>
         </div>
       </div>
 
       {/* 本文（PC・スマホ共通で640px幅） */}
       <div className="mx-auto w-full max-w-[640px]">
-        {/* 導入文 */}
-        <div className="px-6 py-7">
-          <p className="text-base leading-loose text-slate-300">
-            登録したメールアドレスとパスワードを入力してください。
-          </p>
-        </div>
-
         {/* フォームカード */}
-        <div className="px-4 pb-14">
+        <div className="px-4 pb-14 pt-7">
           <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
