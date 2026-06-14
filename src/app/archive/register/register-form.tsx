@@ -148,23 +148,23 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
-      {/* ヒーロー（合成画像を背景に全面表示し、左にテキストを重ねる） */}
-      <div className="relative w-full overflow-hidden">
-        {/* 背景画像は比率を保って全体表示（参考デザインを忠実に再現） */}
+      {/* ヒーロー（横長枠 + 右に人物画像 + 左テキスト） */}
+      <div className="relative h-[300px] w-full overflow-hidden bg-[#050a0e] sm:h-[380px] lg:h-[460px]">
+        {/* 人物画像（右側に配置・上寄せ） */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/nagashima_black01.png"
           alt=""
-          className="block h-auto w-full"
+          className="absolute right-0 top-0 h-full w-[50%] object-cover object-top sm:w-[44%]"
         />
-        {/* 左を暗くフェードしてテキストの可読性を確保 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/55 to-transparent" />
+        {/* 左を暗くフェードしてテキストの可読性を確保（人物との境目を自然に） */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/80 via-45% to-transparent" />
         {/* 下端の区切り線 */}
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-teal-400/70 via-emerald-400/40 to-transparent" />
 
-        {/* 左寄せのテキスト（すべて白） */}
+        {/* 左寄せのテキスト（すべて白）。縦は中央寄せ */}
         <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col justify-center px-6 sm:px-10 lg:px-16">
-          <div className="mb-[4%]">
+          <div className="mb-5">
             <div className="font-serif text-[24px] tracking-wide text-white">
               BioVault
             </div>
@@ -177,7 +177,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             <br />
             機密保持同意フォーム
           </h1>
-          <div className="mt-[4%] h-px w-[78%] max-w-md bg-gradient-to-r from-teal-400 via-emerald-400/50 to-transparent" />
+          <div className="mt-5 h-px w-[72%] max-w-md bg-gradient-to-r from-teal-400 via-emerald-400/50 to-transparent" />
         </div>
       </div>
 
