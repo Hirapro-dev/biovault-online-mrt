@@ -167,12 +167,12 @@ export default function ArchiveLoginPage() {
 
       {/* ===== デスクトップ（左：テキスト＋カード / 右：人物フル） ===== */}
       <div className="hidden min-h-screen lg:block">
-        {/* 人物画像（右半分・フル） */}
+        {/* 人物画像（右側・下寄せ・やや小さめ） */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/nagashima_black02.png"
           alt=""
-          className="absolute right-0 top-0 h-full w-1/2 object-cover object-top"
+          className="absolute bottom-0 right-0 h-[82%] w-[42%] object-cover object-bottom"
         />
         {/* 左を暗くフェードして可読性確保 */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[30%] via-[#050a0e]/80 via-[55%] to-transparent" />
