@@ -148,8 +148,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#050a0e] via-[#05140f] to-[#03110c] text-white">
-      {/* ヒーロー（背景動画 + 中央寄せタイトル） */}
-      <div className="relative h-[340px] w-full overflow-hidden sm:h-[420px]">
+      {/* ヒーロー（背景動画 + 左テキスト・右画像） */}
+      <div className="relative h-[300px] w-full overflow-hidden sm:h-[400px]">
         {/* 背景動画（元の背景動画を使用） */}
         <video
           autoPlay
@@ -162,13 +162,20 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         >
           <source src="/login-bg.mp4" type="video/mp4" />
         </video>
-        {/* 可読性確保の暗いオーバーレイ + 下端フェード */}
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050a0e] to-transparent" />
+        {/* 暗いオーバーレイ */}
+        <div className="absolute inset-0 bg-black/40" />
+        {/* 右側に画像（永島さん） */}
+        <div
+          className="absolute inset-y-0 right-0 w-[58%] bg-cover bg-top sm:w-[50%]"
+          style={{ backgroundImage: "url(/nagashima_black01.png)" }}
+        />
+        {/* 左を暗くフェードしてテキストの可読性を確保 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/85 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#050a0e] to-transparent" />
 
-        {/* 中央寄せのテキスト（すべて白） */}
-        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col items-center justify-center px-6 text-center">
-          <div className="mb-6">
+        {/* 左寄せのテキスト（すべて白） */}
+        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col justify-center px-6">
+          <div className="mb-5">
             <div className="font-serif text-2xl tracking-wide text-white">BioVault</div>
             <div className="mt-1 text-[11px] tracking-[0.35em] text-white/80">
               Membership Service
@@ -179,12 +186,12 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             <br />
             機密保持契約同意フォーム
           </h1>
-          <div className="mt-5 h-[2px] w-16 bg-white/80" />
+          <div className="mt-4 h-[2px] w-32 bg-gradient-to-r from-amber-400 to-transparent" />
         </div>
       </div>
 
       {/* 導入文 */}
-      <div className="mx-auto max-w-3xl px-6 py-7 text-center">
+      <div className="mx-auto max-w-3xl px-6 py-7">
         <p className="text-base leading-relaxed text-slate-300">
           本フォームは機密情報を含むLive配信映像を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
         </p>
