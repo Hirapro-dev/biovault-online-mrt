@@ -148,42 +148,42 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
-     <div className="mx-auto w-full max-w-[640px]">
-      {/* ヒーロー（横長枠 + 右に人物画像 + 左テキスト） */}
-      <div className="relative h-[230px] w-full overflow-hidden bg-[#050a0e] sm:h-[260px]">
-        {/* 人物画像（右側に配置・上寄せ・はっきり表示） */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/nagashima_black01.png"
-          alt=""
-          className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
-        />
-        {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
-        {/* 下端の区切り線 */}
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-teal-400/70 via-emerald-400/40 to-transparent" />
+      {/* ヒーロー：下端ボーダーは全幅、内側コンテンツは640px */}
+      <div className="relative border-b border-teal-400/40 bg-[#050a0e]">
+        <div className="relative mx-auto h-[200px] w-full max-w-[640px] overflow-hidden sm:h-[260px]">
+          {/* 人物画像（右側に配置・上寄せ・はっきり表示） */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/nagashima_black01.png"
+            alt=""
+            className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
+          />
+          {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
 
-        {/* 左寄せのテキスト（すべて白）。縦は中央寄せ */}
-        <div className="absolute inset-0 flex flex-col justify-center px-6">
-          <div className="mb-5">
-            <div className="font-serif text-[24px] tracking-wide text-white">
-              BioVault
+          {/* 左寄せのテキスト（すべて白）。縦は中央寄せ */}
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <div className="mb-5">
+              <div className="font-serif text-[20px] tracking-wide text-white">
+                BioVault
+              </div>
+              <div className="text-[12px] tracking-[0.2em] text-teal-200/80">
+                Membership Service
+              </div>
             </div>
-            <div className="mt-1.5 text-[12px] tracking-[0.4em] text-teal-200/80">
-              Membership Service
-            </div>
+            <h1 className="font-serif text-[24px] font-bold leading-[1.3] text-white">
+              Live配信映像視聴
+              <br />
+              機密保持同意フォーム
+            </h1>
           </div>
-          <h1 className="font-serif text-[28px] font-bold leading-[1.3] text-white">
-            Live配信映像視聴
-            <br />
-            機密保持同意フォーム
-          </h1>
-          <div className="mt-6 h-px w-[58%] max-w-xl bg-gradient-to-r from-teal-400 via-emerald-400/50 to-transparent" />
         </div>
       </div>
 
+      {/* 本文（PC・スマホ共通で640px幅） */}
+      <div className="mx-auto w-full max-w-[640px]">
       {/* 導入文 */}
-      <div className="px-6 py-8">
+      <div className="px-6 py-7">
         <p className="text-base leading-loose text-slate-300">
           本フォームは機密情報を含むLive配信映像を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
         </p>
@@ -191,7 +191,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
       {/* フォームカード */}
       <div className="px-4 pb-14">
-        <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-8 sm:py-10">
+        <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-white">申請者情報</h2>
             <div className="mt-3 h-px w-full bg-gradient-to-r from-teal-500/60 to-transparent" />
@@ -424,7 +424,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           © MRT inc. All rights reserved.
         </p>
       </div>
-     </div>
+      </div>
     </div>
   );
 }
