@@ -107,6 +107,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("Play check error:", err);
-    return NextResponse.json({ error: "サーバーエラー" }, { status: 500 });
+    // 原因特定のため一時的にエラー詳細を返す
+    const detail =
+      err instanceof Error ? err.message : JSON.stringify(err);
+    return NextResponse.json(
+      { error: "サーバーエラー", detail },
+      { status: 500 }
+    );
   }
 }
