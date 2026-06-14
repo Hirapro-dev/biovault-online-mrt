@@ -11,13 +11,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ARCHIVE_GROUPS, ARCHIVE_GROUP_LABELS } from "@/lib/archive-group";
-import { calcAccessDeadline } from "@/lib/archive-access";
 import { ArrowLeft, Save, Trash2, Copy, Check, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 // 会員情報付きの視聴ログ
 interface ViewWithMember extends ArchiveView {
   archive_members: { name: string; name_kana: string } | null;
+}
+
+// 再生1回ごとの履歴（いつ・誰が・どれだけ視聴したか）
+interface PlayLogRow {
+  id: string;
+  member_id: string;
+  played_at: string;
+  watch_seconds: number | null;
+  archive_members: { name: string } | null;
 }
 
 // datetime-local用のフォーマット変換
@@ -47,6 +55,7 @@ export default function ArchiveVideoDetailPage() {
 
   const [video, setVideo] = useState<ArchiveVideo | null>(null);
   const [views, setViews] = useState<ViewWithMember[]>([]);
+  const [playLogs, setPlayLogs] = useState<PlayLogRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [urlCopied, setUrlCopied] = useState(false);
@@ -61,14 +70,21 @@ export default function ArchiveVideoDetailPage() {
 
   const fetchData = useCallback(async () => {
     const supabase = createClient();
-    const [{ data: videoData }, { data: viewData }] = await Promise.all([
-      supabase.from("archive_videos").select("*").eq("id", params.id).single(),
-      supabase
-        .from("archive_views")
-        .select("*, archive_members(name, name_kana)")
-        .eq("video_id", params.id)
-        .order("last_viewed_at", { ascending: false }),
-    ]);
+    const [{ data: videoData }, { data: viewData }, { data: logData }] =
+      await Promise.all([
+        supabase.from("archive_videos").select("*").eq("id", params.id).single(),
+        supabase
+          .from("archive_views")
+          .select("*, archive_members(name, name_kana)")
+          .eq("video_id", params.id)
+          .order("last_viewed_at", { ascending: false }),
+        // 再生1回ごとの履歴（新しい順）
+        supabase
+          .from("archive_play_logs")
+          .select("id, member_id, played_at, watch_seconds, archive_members(name)")
+          .eq("video_id", params.id)
+          .order("played_at", { ascending: false }),
+      ]);
 
     if (videoData) {
       const v = videoData as ArchiveVideo;
@@ -80,6 +96,7 @@ export default function ArchiveVideoDetailPage() {
       setAllowedGroups((v.allowed_groups ?? ["a", "b"]) as ("a" | "b")[]);
     }
     setViews((viewData as ViewWithMember[]) || []);
+    setPlayLogs((logData as unknown as PlayLogRow[]) || []);
     setIsLoading(false);
   }, [params.id]);
 
@@ -322,13 +339,18 @@ export default function ArchiveVideoDetailPage() {
         </CardContent>
       </Card>
 
-      {/* 会員別視聴ログ */}
+      {/* 視聴履歴（再生1回ごと：いつ・誰が・どれだけ視聴したか） */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">会員別視聴ログ</CardTitle>
+          <CardTitle className="text-base">
+            視聴履歴（再生ごと）
+            <span className="ml-2 text-xs font-normal text-muted-foreground">
+              全{playLogs.length}件
+            </span>
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          {views.length === 0 ? (
+          {playLogs.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
               まだ視聴されていません
             </p>
@@ -337,41 +359,24 @@ export default function ArchiveVideoDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs text-muted-foreground">
+                    <th className="px-2 py-2">視聴日時</th>
                     <th className="px-2 py-2">視聴ID</th>
                     <th className="px-2 py-2">氏名</th>
-                    <th className="px-2 py-2">再生回数</th>
-                    <th className="px-2 py-2">視聴期限</th>
-                    <th className="px-2 py-2">合計視聴時間</th>
-                    <th className="px-2 py-2">最終視聴日時</th>
+                    <th className="px-2 py-2">視聴時間</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {views.map((v) => (
-                    <tr key={v.id} className="border-b hover:bg-muted/50">
-                      <td className="px-2 py-2 font-mono">{v.member_id}</td>
-                      <td className="px-2 py-2">{v.archive_members?.name || "—"}</td>
-                      <td className="px-2 py-2">{v.view_count}回</td>
-                      <td className="whitespace-nowrap px-2 py-2">
-                        {v.first_viewed_at ? (
-                          (() => {
-                            const deadline = calcAccessDeadline(v.first_viewed_at);
-                            const expired = deadline.getTime() < Date.now();
-                            return (
-                              <span className={expired ? "text-red-500" : "text-muted-foreground"}>
-                                {deadline.toLocaleString("ja-JP")}
-                                {expired && "（終了）"}
-                              </span>
-                            );
-                          })()
-                        ) : (
-                          <span className="text-muted-foreground">未再生</span>
-                        )}
-                      </td>
-                      <td className="px-2 py-2">{formatSeconds(v.total_watch_seconds)}</td>
+                  {playLogs.map((log) => (
+                    <tr key={log.id} className="border-b hover:bg-muted/50">
                       <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
-                        {v.last_viewed_at
-                          ? new Date(v.last_viewed_at).toLocaleString("ja-JP")
-                          : "—"}
+                        {new Date(log.played_at).toLocaleString("ja-JP")}
+                      </td>
+                      <td className="px-2 py-2 font-mono">{log.member_id}</td>
+                      <td className="px-2 py-2">
+                        {log.archive_members?.name || "—"}
+                      </td>
+                      <td className="px-2 py-2">
+                        {formatSeconds(log.watch_seconds)}
                       </td>
                     </tr>
                   ))}

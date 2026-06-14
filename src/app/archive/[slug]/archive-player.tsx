@@ -22,6 +22,8 @@ export function ArchivePlayer({
 
   // 視聴時間の計測（30秒ごと + 離脱時に送信）
   const watchedSecondsRef = useRef(0);
+  // この再生に対応する再生履歴ID（再生ごとの視聴時間加算に使用）
+  const playLogIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!playbackUrl) return;
@@ -39,7 +41,11 @@ export function ArchivePlayer({
       if (seconds <= 0) return;
       watchedSecondsRef.current = 0;
 
-      const payload = JSON.stringify({ video_id: videoId, seconds });
+      const payload = JSON.stringify({
+        video_id: videoId,
+        seconds,
+        play_log_id: playLogIdRef.current,
+      });
       if (useBeacon && navigator.sendBeacon) {
         navigator.sendBeacon(
           "/api/archive/watch-time",
@@ -99,6 +105,7 @@ export function ArchivePlayer({
         throw new Error(result.error || "再生できませんでした");
       }
 
+      playLogIdRef.current = result.play_log_id ?? null;
       setPlaybackUrl(result.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "再生できませんでした");

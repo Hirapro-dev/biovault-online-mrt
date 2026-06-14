@@ -104,11 +104,12 @@ export async function POST(request: NextRequest) {
       if (insertError) throw insertError;
     }
 
-    // 再生履歴を記録
-    await supabase.from("archive_play_logs").insert({
-      member_id: memberId,
-      video_id,
-    });
+    // 再生履歴を記録（この再生に対応する行のIDを取得して返す）
+    const { data: playLog } = await supabase
+      .from("archive_play_logs")
+      .insert({ member_id: memberId, video_id })
+      .select("id")
+      .single();
 
     // R2署名付きURL（有効期限2時間）を発行
     const playbackUrl = await createPlaybackUrl(video.r2_key);
@@ -117,6 +118,8 @@ export async function POST(request: NextRequest) {
       url: playbackUrl,
       // 視聴期限（初回再生 + 72時間）をクライアントに通知
       expiresAt: calcAccessDeadline(firstViewedAt).toISOString(),
+      // この再生の履歴ID（視聴時間の加算に使用）
+      play_log_id: playLog?.id ?? null,
     });
   } catch (err) {
     console.error("Play check error:", err);
