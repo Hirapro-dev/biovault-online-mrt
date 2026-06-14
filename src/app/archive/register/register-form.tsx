@@ -148,8 +148,9 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
+     <div className="mx-auto w-full max-w-[640px]">
       {/* ヒーロー（横長枠 + 右に人物画像 + 左テキスト） */}
-      <div className="relative h-[230px] w-full overflow-hidden bg-[#050a0e] sm:h-[280px] lg:h-[330px]">
+      <div className="relative h-[230px] w-full overflow-hidden bg-[#050a0e] sm:h-[260px]">
         {/* 人物画像（右側に配置・上寄せ・はっきり表示） */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -163,7 +164,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-teal-400/70 via-emerald-400/40 to-transparent" />
 
         {/* 左寄せのテキスト（すべて白）。縦は中央寄せ */}
-        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col justify-center px-6 sm:px-10 lg:px-16">
+        <div className="absolute inset-0 flex flex-col justify-center px-6">
           <div className="mb-5">
             <div className="font-serif text-[24px] tracking-wide text-white">
               BioVault
@@ -182,15 +183,15 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
       </div>
 
       {/* 導入文 */}
-      <div className="mx-auto max-w-6xl px-6 py-9 sm:px-10 lg:px-16">
-        <p className="text-base leading-loose text-slate-300 sm:text-lg">
+      <div className="px-6 py-8">
+        <p className="text-base leading-loose text-slate-300">
           本フォームは機密情報を含むLive配信映像を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
         </p>
       </div>
 
       {/* フォームカード */}
-      <div className="mx-auto max-w-2xl px-4 pb-14">
-        <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
+      <div className="px-4 pb-14">
+        <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-8 sm:py-10">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-white">申請者情報</h2>
             <div className="mt-3 h-px w-full bg-gradient-to-r from-teal-500/60 to-transparent" />
@@ -423,6 +424,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           © MRT inc. All rights reserved.
         </p>
       </div>
+     </div>
     </div>
   );
 }
