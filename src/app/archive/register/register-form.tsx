@@ -147,7 +147,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
     "h-12 rounded-lg border-0 bg-[#0d1520] text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40";
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-b from-[#050a0e] via-[#05140f] to-[#03110c] text-white">
+    <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
       {/* ヒーロー（背景動画 + 左テキスト・右画像）。参考デザインの寸法に合わせる */}
       <div className="relative h-[420px] w-full overflow-hidden sm:h-[480px] lg:h-[540px]">
         {/* 背景動画（元の背景動画を使用） */}
@@ -201,7 +201,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
       {/* フォームカード */}
       <div className="mx-auto max-w-2xl px-4 pb-14">
-        <div className="rounded-2xl border border-teal-500/30 bg-[#070f0c]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
+        <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-white">申請者情報</h2>
             <div className="mt-3 h-px w-full bg-gradient-to-r from-teal-500/60 to-transparent" />
