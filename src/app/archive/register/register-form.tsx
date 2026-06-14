@@ -148,8 +148,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#050a0e] via-[#05140f] to-[#03110c] text-white">
-      {/* ヒーロー（背景動画 + 左テキスト・右画像） */}
-      <div className="relative h-[300px] w-full overflow-hidden sm:h-[400px]">
+      {/* ヒーロー（背景動画 + 左テキスト・右画像）。参考デザインの寸法に合わせる */}
+      <div className="relative h-[360px] w-full overflow-hidden border-b border-amber-500/40 sm:h-[460px] lg:h-[520px]">
         {/* 背景動画（元の背景動画を使用） */}
         <video
           autoPlay
@@ -166,33 +166,35 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         <div className="absolute inset-0 bg-black/40" />
         {/* 右側に画像（永島さん） */}
         <div
-          className="absolute inset-y-0 right-0 w-[58%] bg-cover bg-top sm:w-[50%]"
+          className="absolute inset-y-0 right-0 w-[60%] bg-cover bg-top sm:w-[52%]"
           style={{ backgroundImage: "url(/nagashima_black01.png)" }}
         />
         {/* 左を暗くフェードしてテキストの可読性を確保 */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/85 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#050a0e] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#050a0e]/60 to-transparent" />
 
         {/* 左寄せのテキスト（すべて白） */}
-        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col justify-center px-6">
-          <div className="mb-5">
-            <div className="font-serif text-2xl tracking-wide text-white">BioVault</div>
-            <div className="mt-1 text-[11px] tracking-[0.35em] text-white/80">
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6 sm:px-10 lg:px-16">
+          <div className="mb-6">
+            <div className="font-serif text-3xl tracking-wide text-white sm:text-4xl">
+              BioVault
+            </div>
+            <div className="mt-1.5 text-xs tracking-[0.4em] text-white/80 sm:text-sm">
               Membership Service
             </div>
           </div>
-          <h1 className="font-serif text-2xl font-bold leading-snug text-white sm:text-4xl">
+          <h1 className="font-serif text-4xl font-bold leading-[1.2] text-white sm:text-5xl lg:text-6xl">
             Live配信映像視聴
             <br />
             機密保持契約同意フォーム
           </h1>
-          <div className="mt-4 h-[2px] w-32 bg-gradient-to-r from-amber-400 to-transparent" />
+          <div className="mt-6 h-[2px] w-[70%] max-w-md bg-gradient-to-r from-amber-400 via-amber-400/60 to-transparent" />
         </div>
       </div>
 
       {/* 導入文 */}
-      <div className="mx-auto max-w-3xl px-6 py-7">
-        <p className="text-base leading-relaxed text-slate-300">
+      <div className="mx-auto max-w-6xl px-6 py-9 sm:px-10 lg:px-16">
+        <p className="text-base leading-loose text-slate-300 sm:text-lg">
           本フォームは機密情報を含むLive配信映像を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
         </p>
       </div>
