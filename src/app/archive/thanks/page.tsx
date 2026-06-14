@@ -9,18 +9,19 @@ export default async function ArchiveThanksPage({
 }: {
   searchParams: { id?: string; pw?: string };
 }) {
-  const memberId = searchParams.id || "";
+  // id にはログインID（メールアドレス）が渡される
+  const loginId = searchParams.id || "";
   const password = searchParams.pw || "";
 
   const supabase = createServiceRoleClient();
 
-  // 登録した会員の流入元グループを取得
+  // 登録した会員の流入元グループをメールアドレスから取得
   let groupKey = "watch_page_url_a";
-  if (memberId) {
+  if (loginId) {
     const { data: member } = await supabase
       .from("archive_members")
       .select("member_group")
-      .eq("member_id", memberId)
+      .eq("email", loginId.toLowerCase())
       .maybeSingle();
     if (member?.member_group === "b") groupKey = "watch_page_url_b";
   }
@@ -39,6 +40,6 @@ export default async function ArchiveThanksPage({
     settingMap[groupKey] || settingMap["watch_page_url"] || "/archive/login";
 
   return (
-    <ThanksCard memberId={memberId} password={password} watchPageUrl={watchPageUrl} />
+    <ThanksCard memberId={loginId} password={password} watchPageUrl={watchPageUrl} />
   );
 }

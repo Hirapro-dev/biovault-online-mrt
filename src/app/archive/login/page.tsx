@@ -10,7 +10,7 @@ import { ArchiveBackground } from "../archive-background";
 // 録画配信：会員ログインページ
 export default function ArchiveLoginPage() {
   const router = useRouter();
-  const [memberId, setMemberId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function ArchiveLoginPage() {
       const res = await fetch("/api/archive/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ member_id: memberId, password }),
+        body: JSON.stringify({ email, password }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "ログインに失敗しました");
@@ -57,20 +57,21 @@ export default function ArchiveLoginPage() {
               録画配信 ログイン
             </h1>
             <p className="mt-4 text-sm tracking-wide text-slate-400">
-              発行されたIDとパスワードを入力してください
+              登録したメールアドレスとパスワードを入力してください
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <label className="block text-xs font-medium uppercase tracking-widest text-white">
-                視聴ID
+                メールアドレス
               </label>
               <Input
-                value={memberId}
-                onChange={(e) => setMemberId(e.target.value)}
-                placeholder="例: yamada1234"
-                className="h-12 border-0 bg-[#0d1520] text-center font-mono text-lg tracking-widest text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@example.com"
+                className="h-12 border-0 bg-[#0d1520] text-center text-lg text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
                 autoFocus
               />
             </div>
@@ -83,8 +84,8 @@ export default function ArchiveLoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="電話番号下8桁"
-                  className="h-12 border-0 bg-[#0d1520] pr-12 text-center font-mono text-lg tracking-widest text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                  placeholder="登録時に設定したパスワード"
+                  className="h-12 border-0 bg-[#0d1520] pr-12 text-center text-lg text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
                 />
                 {/* パスワード表示/非表示トグル */}
                 <button
@@ -112,7 +113,7 @@ export default function ArchiveLoginPage() {
             <Button
               type="submit"
               className="h-12 w-full bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 text-base font-semibold text-white hover:from-teal-500 hover:via-cyan-400 hover:to-teal-500"
-              disabled={isLoading || !memberId.trim() || !password.trim()}
+              disabled={isLoading || !email.trim() || !password.trim()}
             >
               {isLoading ? (
                 <>

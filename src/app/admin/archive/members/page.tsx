@@ -24,6 +24,7 @@ export default function ArchiveMembersPage() {
   const [formKana, setFormKana] = useState("");
   const [formPhone, setFormPhone] = useState("");
   const [formEmail, setFormEmail] = useState("");
+  const [formPassword, setFormPassword] = useState("");
   const [formAddress, setFormAddress] = useState("");
   const [formGroup, setFormGroup] = useState<"a" | "b">("a");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,6 +62,7 @@ export default function ArchiveMembersPage() {
           name_kana: formKana,
           phone: formPhone,
           email: formEmail,
+          password: formPassword,
           address: formAddress,
           member_group: formGroup,
           confidentiality_agreed: true,
@@ -76,6 +78,7 @@ export default function ArchiveMembersPage() {
       setFormKana("");
       setFormPhone("");
       setFormEmail("");
+      setFormPassword("");
       setFormAddress("");
       setFormGroup("a");
       fetchMembers();
@@ -245,12 +248,21 @@ export default function ArchiveMembersPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>メールアドレス *</Label>
+                  <Label>メールアドレス（ログインID） *</Label>
                   <Input
                     type="email"
                     value={formEmail}
                     onChange={(e) => setFormEmail(e.target.value)}
                     placeholder="example@example.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>パスワード *</Label>
+                  <Input
+                    value={formPassword}
+                    onChange={(e) => setFormPassword(e.target.value)}
+                    placeholder="6文字以上の半角英数字"
                     required
                   />
                 </div>

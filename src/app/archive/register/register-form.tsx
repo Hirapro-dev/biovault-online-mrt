@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { generateViewerId } from "@/lib/utils/kana-to-romaji";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,6 +16,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const composeKana = useRef("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -24,18 +25,6 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const [agreed, setAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [viewerId, setViewerId] = useState("");
-  const viewerIdEdited = useRef(false);
-
-  useEffect(() => {
-    if (viewerIdEdited.current) return;
-    setViewerId(generateViewerId(nameKana, phone));
-  }, [nameKana, phone]);
-
-  const handleViewerIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    viewerIdEdited.current = true;
-    setViewerId(e.target.value);
-  };
 
   const isHiraganaOnly = (s: string) => /^[ぁ-ゖー　\s]*$/.test(s);
 
@@ -108,6 +97,17 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // パスワード：6文字以上の半角英数字 + 確認一致チェック
+    if (!/^[A-Za-z0-9]{6,}$/.test(password)) {
+      setError("パスワードは6文字以上の半角英数字で入力してください");
+      return;
+    }
+    if (password !== passwordConfirm) {
+      setError("パスワード（確認）が一致しません");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -124,8 +124,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           name_kana: nameKana,
           phone,
           email,
+          password,
           address: fullAddress,
-          viewer_id: viewerId,
           confidentiality_agreed: agreed,
           member_group: group,
         }),
@@ -134,7 +134,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
       if (!res.ok) throw new Error(result.error || "登録に失敗しました");
 
       router.push(
-        `/archive/thanks?id=${encodeURIComponent(result.member_id)}&pw=${encodeURIComponent(result.password)}`
+        `/archive/thanks?id=${encodeURIComponent(result.login_id)}&pw=${encodeURIComponent(result.password)}`
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : "登録に失敗しました");
@@ -211,26 +211,47 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
             <div className="space-y-1.5">
               <label className="text-base font-medium text-white">
-                視聴ID
+                メールアドレス
                 <span className="ml-2 text-xs font-normal text-slate-500">
-                  ※自動生成されます（手入力での変更も可能）
+                  ※ログインIDになります
                 </span>
               </label>
-              <Input
-                value={viewerId}
-                onChange={handleViewerIdChange}
-                placeholder="氏名・電話番号の入力後に自動生成"
-                className={`${inputClass} font-mono tracking-wider text-teal-300`}
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-base font-medium text-white">メールアドレス</label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@example.com"
+                className={inputClass}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-base font-medium text-white">
+                パスワード
+                <span className="ml-2 text-xs font-normal text-slate-500">
+                  ※6文字以上の半角英数字
+                </span>
+              </label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="6文字以上の半角英数字"
+                autoComplete="new-password"
+                className={inputClass}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-base font-medium text-white">パスワード（確認）</label>
+              <Input
+                type="password"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                placeholder="同じパスワードを再入力"
+                autoComplete="new-password"
                 className={inputClass}
                 required
               />

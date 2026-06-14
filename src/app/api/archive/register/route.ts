@@ -18,14 +18,14 @@ function splitAddress(full: string): { zipCode: string; address: string } {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, name_kana, phone, email, address, viewer_id, confidentiality_agreed, member_group } =
+    const { name, name_kana, phone, email, address, password, confidentiality_agreed, member_group } =
       body as {
         name?: string;
         name_kana?: string;
         phone?: string;
         email?: string;
         address?: string;
-        viewer_id?: string;
+        password?: string;
         confidentiality_agreed?: boolean;
         member_group?: "a" | "b";
       };
@@ -41,11 +41,20 @@ export async function POST(request: NextRequest) {
     if (phoneDigits.length < 8) {
       return NextResponse.json({ error: "電話番号を正しく入力してください" }, { status: 400 });
     }
-    if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    const emailNormalized = (email || "").trim().toLowerCase();
+    if (!emailNormalized || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalized)) {
       return NextResponse.json({ error: "メールアドレスを正しく入力してください" }, { status: 400 });
     }
     if (!address?.trim()) {
       return NextResponse.json({ error: "住所を入力してください" }, { status: 400 });
+    }
+    // パスワード：6文字以上の半角英数字
+    const pw = (password || "").trim();
+    if (!/^[A-Za-z0-9]{6,}$/.test(pw)) {
+      return NextResponse.json(
+        { error: "パスワードは6文字以上の半角英数字で入力してください" },
+        { status: 400 }
+      );
     }
     if (confidentiality_agreed !== true) {
       return NextResponse.json({ error: "機密保持契約への同意が必要です" }, { status: 400 });
@@ -53,39 +62,38 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServiceRoleClient();
 
-    // 視聴ID: 苗字ローマ字 + 電話下4桁（クライアント生成値を優先、無ければサーバーで再生成）
-    const memberId =
-      viewer_id?.trim() || generateViewerId(name_kana, phoneDigits);
-    if (!memberId) {
-      return NextResponse.json(
-        { error: "視聴IDを生成できませんでした。ふりがな・電話番号をご確認ください" },
-        { status: 400 }
-      );
-    }
-
-    // 同一IDの重複チェック（同姓 + 電話下4桁が一致するケース）
-    const { data: existing } = await supabase
+    // メールアドレス（ログインID）の重複チェック
+    const { data: existingEmail } = await supabase
       .from("archive_members")
       .select("id")
-      .eq("member_id", memberId)
+      .eq("email", emailNormalized)
       .maybeSingle();
-    if (existing) {
+    if (existingEmail) {
       return NextResponse.json(
-        { error: "この視聴IDは既に登録されています（既にご登録済みの可能性があります）" },
+        { error: "このメールアドレスは既に登録されています" },
         { status: 409 }
       );
     }
 
-    // パスワード: 電話番号の下8桁
-    const password = phoneDigits.slice(-8);
+    // 内部ID（視聴ログ等の紐付け用）を生成。衝突したらランダム数字を付けて一意化する
+    let memberId = generateViewerId(name_kana, phoneDigits) || `bv${phoneDigits.slice(-4)}`;
+    for (let i = 0; i < 5; i++) {
+      const { data: dup } = await supabase
+        .from("archive_members")
+        .select("id")
+        .eq("member_id", memberId)
+        .maybeSingle();
+      if (!dup) break;
+      memberId = `${memberId}${Math.floor(Math.random() * 10)}`;
+    }
 
     const { error: insertError } = await supabase.from("archive_members").insert({
       member_id: memberId,
-      password,
+      password: pw,
       name: name.trim(),
       name_kana: name_kana.trim(),
       phone: phone!.trim(),
-      email: email.trim(),
+      email: emailNormalized,
       address: address.trim(),
       confidentiality_agreed: true,
       member_group: member_group === "b" ? "b" : "a",
@@ -115,19 +123,20 @@ export async function POST(request: NextRequest) {
         `${process.env.NEXT_PUBLIC_APP_URL || ""}/archive/login`;
 
       // 会員への自動返信と管理者への通知を並行送信
+      // ログインIDはメールアドレス、パスワードは利用者が設定したもの
       await Promise.all([
         sendRegistrationEmail({
-          to: email.trim(),
+          to: emailNormalized,
           name: name.trim(),
-          memberId,
-          password,
+          loginId: emailNormalized,
+          password: pw,
           watchPageUrl,
         }),
         sendAdminNotificationEmail({
           name: name.trim(),
           nameKana: name_kana.trim(),
           phone: phone!.trim(),
-          email: email.trim(),
+          email: emailNormalized,
           // 保存住所「〒1234567 東京都...」を郵便番号と住所に分解
           ...splitAddress(address.trim()),
           memberId,
@@ -138,7 +147,8 @@ export async function POST(request: NextRequest) {
       console.error("登録メールの送信処理でエラー:", mailErr);
     }
 
-    return NextResponse.json({ member_id: memberId, password });
+    // ログインID（メール）とパスワードを返す（サンクスページ表示用）
+    return NextResponse.json({ login_id: emailNormalized, password: pw });
   } catch (err) {
     console.error("Archive register error:", err);
     return NextResponse.json({ error: "サーバーエラー" }, { status: 500 });

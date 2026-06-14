@@ -9,28 +9,29 @@ import {
 // 録画配信会員のログイン
 export async function POST(request: NextRequest) {
   try {
-    const { member_id, password } = (await request.json()) as {
-      member_id?: string;
+    const { email, password } = (await request.json()) as {
+      email?: string;
       password?: string;
     };
 
-    if (!member_id?.trim() || !password?.trim()) {
+    if (!email?.trim() || !password?.trim()) {
       return NextResponse.json(
-        { error: "IDとパスワードを入力してください" },
+        { error: "メールアドレスとパスワードを入力してください" },
         { status: 400 }
       );
     }
 
     const supabase = createServiceRoleClient();
+    // ログインIDはメールアドレス（大文字小文字を無視）
     const { data: member, error } = await supabase
       .from("archive_members")
       .select("member_id, password, name, is_active, member_group")
-      .eq("member_id", member_id.trim())
-      .single();
+      .eq("email", email.trim().toLowerCase())
+      .maybeSingle();
 
     if (error || !member || member.password !== password.trim()) {
       return NextResponse.json(
-        { error: "IDまたはパスワードが正しくありません" },
+        { error: "メールアドレスまたはパスワードが正しくありません" },
         { status: 401 }
       );
     }

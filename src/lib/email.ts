@@ -87,7 +87,7 @@ export async function sendEmail({
 interface RegistrationMailParams {
   to: string;
   name: string;
-  memberId: string;
+  loginId: string; // ログインID（メールアドレス）
   password: string;
   watchPageUrl: string;
 }
@@ -96,7 +96,8 @@ interface RegistrationMailParams {
 export async function sendRegistrationEmail(
   params: RegistrationMailParams
 ): Promise<boolean> {
-  const { to, name, memberId, password, watchPageUrl } = params;
+  const { to, name, loginId, password, watchPageUrl } = params;
+  const memberId = loginId;
   const subject = "【MRT】録画配信 視聴登録完了のお知らせ";
 
   const text = `${name} 様
