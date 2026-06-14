@@ -45,6 +45,8 @@ export default function ArchiveLoginPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
+      {/* ===== モバイル / タブレット（現状維持） ===== */}
+      <div className="lg:hidden">
       {/* ヒーロー（ボーダーなし・内側640px・右人物・左テキスト＋コピー） */}
       <div className="relative bg-[#050a0e]">
         <div className="relative mx-auto h-[260px] w-full max-w-[640px] overflow-hidden">
@@ -159,6 +161,113 @@ export default function ArchiveLoginPage() {
           <p className="mt-6 text-center text-xs text-white/40">
             © MRT inc. All rights reserved.
           </p>
+        </div>
+      </div>
+      </div>
+
+      {/* ===== デスクトップ（左：テキスト＋カード / 右：人物フル） ===== */}
+      <div className="hidden min-h-screen lg:block">
+        {/* 人物画像（右半分・フル） */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/nagashima_black02.png"
+          alt=""
+          className="absolute right-0 top-0 h-full w-1/2 object-cover object-top"
+        />
+        {/* 左を暗くフェードして可読性確保 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[30%] via-[#050a0e]/80 via-[55%] to-transparent" />
+
+        {/* 左カラム */}
+        <div className="relative z-10 flex min-h-screen flex-col justify-center px-16 xl:px-24">
+          <div className="w-full max-w-md">
+            <div className="mb-5">
+              <div className="font-serif text-[28px] tracking-wide text-white">
+                BioVault
+              </div>
+              <div className="mt-1 text-[13px] tracking-[0.3em] text-teal-200/80">
+                Membership Service
+              </div>
+            </div>
+            <h1 className="font-serif text-[40px] font-bold leading-[1.25] text-white">
+              Live配信映像視聴
+              <br />
+              ログインページ
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-slate-300">
+              登録したメールアドレスとパスワードを入力してください。
+            </p>
+
+            <div className="mt-8 rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-8 py-8 shadow-2xl">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-2">
+                  <label className="block text-xs font-medium uppercase tracking-widest text-white">
+                    メールアドレス
+                  </label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="example@example.com"
+                    className="h-12 rounded-lg border-0 bg-[#0d1520] text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-medium uppercase tracking-widest text-white">
+                    パスワード
+                  </label>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="登録時に設定したパスワード"
+                      className="h-12 rounded-lg border-0 bg-[#0d1520] pr-14 text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
+                      tabIndex={-1}
+                      aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-center text-sm text-red-400">
+                    {error}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  className="h-12 w-full bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 text-base font-semibold text-white hover:from-teal-500 hover:via-cyan-400 hover:to-teal-500"
+                  disabled={isLoading || !email.trim() || !password.trim()}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      認証中...
+                    </>
+                  ) : (
+                    "ログイン"
+                  )}
+                </Button>
+
+                <p className="text-center text-xs leading-relaxed text-slate-400">
+                  パスワードをお忘れの方は
+                  <br />
+                  担当者までご連絡ください
+                </p>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
