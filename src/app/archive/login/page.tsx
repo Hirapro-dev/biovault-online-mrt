@@ -44,58 +44,49 @@ export default function ArchiveLoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white">
-      {/* 背景動画（元のログイン背景を踏襲） */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="metadata"
-        poster="/video-bg.png"
-        className="pointer-events-none fixed inset-0 h-full w-full object-cover"
-      >
-        <source src="/login-bg.mp4" type="video/mp4" />
-      </video>
-      <div className="pointer-events-none fixed inset-0 bg-black/40" />
+    <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
+      {/* ヒーロー：register/a と同じCSS構造（下端ボーダー全幅・内側640px） */}
+      <div className="relative border-b border-teal-400/40 bg-[#050a0e]">
+        <div className="relative mx-auto h-[200px] w-full max-w-[640px] overflow-hidden sm:h-[260px]">
+          {/* 人物画像（右側に配置・上寄せ） */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/nagashima_black02.png"
+            alt=""
+            className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
+          />
+          {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
 
-      {/* 人物画像（右側に大きめ配置・縁を背景に溶け込ませる） */}
-      <div className="pointer-events-none absolute right-0 top-0 h-[48vh] w-[66%] sm:w-[54%] lg:h-full lg:w-[48%]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/nagashima_black02.png"
-          alt=""
-          className="h-full w-full object-cover object-top lg:object-bottom"
-        />
-        {/* 左端を背景に溶け込ませる */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/30 to-transparent" />
-        {/* 下端を背景／フォームへ繋ぐ */}
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050a0e] to-transparent" />
+          {/* 左寄せのテキスト */}
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <div className="mb-5">
+              <div className="font-serif text-[20px] tracking-wide text-white">
+                BioVault
+              </div>
+              <div className="text-[12px] tracking-[0.2em] text-teal-200/80">
+                Membership Service
+              </div>
+            </div>
+            <h1 className="font-serif text-[24px] font-bold leading-[1.3] text-white">
+              録画配信 ログイン
+            </h1>
+          </div>
+        </div>
       </div>
 
-      {/* コンテンツ：左カラム */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-start px-6 pb-12 pt-[34vh] sm:px-10 lg:justify-center lg:px-16 lg:pt-12">
-        <div className="w-full max-w-md">
-          {/* ワードマーク */}
-          <div className="mb-5">
-            <div className="font-serif text-[24px] tracking-wide text-white">
-              BioVault
-            </div>
-            <div className="mt-1 text-[12px] tracking-[0.3em] text-teal-200/80">
-              Membership Service
-            </div>
-          </div>
-
-          {/* 見出し */}
-          <h1 className="font-serif text-[28px] font-bold leading-[1.3] text-white">
-            録画配信 ログイン
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-slate-300">
+      {/* 本文（PC・スマホ共通で640px幅） */}
+      <div className="mx-auto w-full max-w-[640px]">
+        {/* 導入文 */}
+        <div className="px-6 py-7">
+          <p className="text-base leading-loose text-slate-300">
             登録したメールアドレスとパスワードを入力してください。
           </p>
+        </div>
 
-          {/* フォームカード */}
-          <div className="mt-7 rounded-2xl border border-teal-500/25 bg-[#0a0e13]/90 p-6 shadow-2xl backdrop-blur sm:p-8">
+        {/* フォームカード */}
+        <div className="px-4 pb-14">
+          <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <label className="block text-xs font-medium uppercase tracking-widest text-white">
@@ -106,7 +97,7 @@ export default function ArchiveLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@example.com"
-                  className="h-12 border-0 bg-[#0d1520] text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                  className="h-12 rounded-lg border-0 bg-[#0d1520] text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
                   autoFocus
                 />
               </div>
@@ -120,7 +111,7 @@ export default function ArchiveLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="登録時に設定したパスワード"
-                    className="h-12 border-0 bg-[#0d1520] pr-14 text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
+                    className="h-12 rounded-lg border-0 bg-[#0d1520] pr-14 text-base text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40"
                   />
                   <button
                     type="button"
@@ -167,7 +158,7 @@ export default function ArchiveLoginPage() {
             </form>
           </div>
 
-          <p className="mt-6 text-center text-[10px] text-white/40">
+          <p className="mt-6 text-center text-xs text-white/40">
             © MRT inc. All rights reserved.
           </p>
         </div>
