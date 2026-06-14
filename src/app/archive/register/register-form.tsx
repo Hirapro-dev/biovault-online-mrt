@@ -166,7 +166,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         <div className="absolute inset-0 bg-black/45" />
         {/* 右側に画像（永島さん） */}
         <div
-          className="absolute inset-y-0 right-0 w-[52%] bg-cover bg-top sm:w-[48%]"
+          className="absolute inset-y-0 right-0 w-[46%] bg-cover bg-top sm:w-[42%]"
           style={{ backgroundImage: "url(/nagashima_black01.png)" }}
         />
         {/* 左を暗くフェードしてテキストの可読性を確保（全体と同じ黒×グリーン） */}
@@ -176,17 +176,17 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
         {/* 左寄せのテキスト（すべて白） */}
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6 sm:px-10 lg:px-16">
           <div className="mb-7">
-            <div className="font-serif text-3xl tracking-wide text-white sm:text-4xl">
+            <div className="font-serif text-[24px] tracking-wide text-white">
               BioVault
             </div>
-            <div className="mt-1.5 text-xs tracking-[0.4em] text-teal-200/80 sm:text-sm">
+            <div className="mt-1.5 text-[12px] tracking-[0.4em] text-teal-200/80">
               Membership Service
             </div>
           </div>
           <h1 className="font-serif text-[28px] font-bold leading-[1.3] text-white">
             Live配信映像視聴
             <br />
-            機密保持契約同意フォーム
+            機密保持同意フォーム
           </h1>
           <div className="mt-7 h-px w-[78%] max-w-lg bg-gradient-to-r from-teal-400 via-emerald-400/50 to-transparent" />
         </div>
