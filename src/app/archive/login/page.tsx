@@ -45,16 +45,17 @@ export default function ArchiveLoginPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#050a0e] text-white">
-      {/* 人物画像：モバイルは上部、デスクトップは右半分 */}
-      <div
-        className="absolute right-0 top-0 h-[42vh] w-full bg-cover bg-top lg:h-full lg:w-1/2"
-        style={{ backgroundImage: "url(/nagashima_black02.png)" }}
+      {/* 人物画像：比率を保ってくっきり表示（オーバーレイなし）
+          モバイルは右上、デスクトップは右下に配置 */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/nagashima_black02.png"
+        alt=""
+        className="pointer-events-none absolute right-0 top-0 h-[34vh] w-auto object-contain object-right-top lg:bottom-0 lg:top-auto lg:h-[92%] lg:object-right-bottom"
       />
-      {/* 黒グラデで文字の可読性を確保（モバイルは下方向、デスクトップは左方向） */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050a0e]/70 to-[#050a0e] lg:bg-gradient-to-r lg:from-[#050a0e] lg:from-40% lg:via-[#050a0e]/70 lg:via-55% lg:to-transparent" />
 
       {/* コンテンツ：左カラム */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-start px-6 pb-12 pt-[34vh] sm:px-10 lg:justify-center lg:px-16 lg:pt-12">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-start px-6 pb-12 pt-[30vh] sm:px-10 lg:justify-center lg:px-16 lg:pt-12">
         <div className="w-full max-w-md">
           {/* ワードマーク */}
           <div className="mb-5">
