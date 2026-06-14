@@ -83,7 +83,7 @@ export default function ArchiveLoginPage() {
       {/* 本文（PC・スマホ共通で640px幅） */}
       <div className="relative z-20 mx-auto w-full max-w-[640px]">
         {/* フォームカード（スマホは人物画像と重なるよう上に出す） */}
-        <div className="-mt-16 px-4 pb-14 sm:mt-0 sm:pt-7">
+        <div className="-mt-6 px-4 pb-14 sm:mt-0 sm:pt-7">
           <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
