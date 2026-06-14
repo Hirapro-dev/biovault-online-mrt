@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Loader } from "lucide-react";
+import { Loader2, Loader, Eye, EyeOff } from "lucide-react";
 import { ArchiveBackground } from "../archive-background";
 
 // グループA/Bどちらの登録フォームでも共用するコンポーネント
@@ -18,6 +18,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  // パスワードの表示/非表示（デフォルトは表示）
+  const [showPassword, setShowPassword] = useState(true);
   const [zipCode, setZipCode] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -230,28 +232,50 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                   ※6文字以上の半角英数字
                 </span>
               </label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="6文字以上の半角英数字"
-                autoComplete="new-password"
-                className={inputClass}
-                required
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="6文字以上の半角英数字"
+                  autoComplete="new-password"
+                  className={`${inputClass} pr-12`}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
+                  tabIndex={-1}
+                  aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-1.5">
               <label className="text-base font-medium text-white">パスワード（確認）</label>
-              <Input
-                type="password"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-                placeholder="同じパスワードを再入力"
-                autoComplete="new-password"
-                className={inputClass}
-                required
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={passwordConfirm}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                  placeholder="同じパスワードを再入力"
+                  autoComplete="new-password"
+                  className={`${inputClass} pr-12`}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
+                  tabIndex={-1}
+                  aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-3">
