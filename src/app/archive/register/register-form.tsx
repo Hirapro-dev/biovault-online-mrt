@@ -149,16 +149,16 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
       {/* ヒーロー（横長枠 + 右に人物画像 + 左テキスト） */}
-      <div className="relative h-[300px] w-full overflow-hidden bg-[#050a0e] sm:h-[380px] lg:h-[440px]">
-        {/* 人物画像（右側に配置・上寄せ） */}
+      <div className="relative h-[230px] w-full overflow-hidden bg-[#050a0e] sm:h-[280px] lg:h-[330px]">
+        {/* 人物画像（右側に配置・上寄せ・はっきり表示） */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/nagashima_black01.png"
           alt=""
-          className="absolute right-0 top-0 h-full w-[56%] object-cover object-top sm:w-[50%]"
+          className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
         />
-        {/* 人物の左端を背景に溶け込ませる横グラデーション（ハードな境目を消す） */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[38%] via-[#050a0e]/60 via-[62%] to-transparent" />
+        {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
         {/* 下端の区切り線 */}
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-teal-400/70 via-emerald-400/40 to-transparent" />
 
