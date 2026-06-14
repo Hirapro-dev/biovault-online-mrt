@@ -44,18 +44,37 @@ export default function ArchiveLoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#050a0e] text-white">
-      {/* 人物画像：比率を保ってくっきり表示（オーバーレイなし）
-          モバイルは右上、デスクトップは右下に配置 */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/nagashima_black02.png"
-        alt=""
-        className="pointer-events-none absolute right-0 top-0 h-[34vh] w-auto object-contain object-right-top lg:bottom-0 lg:top-auto lg:h-[92%] lg:object-right-bottom"
-      />
+    <div className="relative min-h-screen w-full overflow-hidden text-white">
+      {/* 背景動画（元のログイン背景を踏襲） */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        poster="/video-bg.png"
+        className="pointer-events-none fixed inset-0 h-full w-full object-cover"
+      >
+        <source src="/login-bg.mp4" type="video/mp4" />
+      </video>
+      <div className="pointer-events-none fixed inset-0 bg-black/40" />
+
+      {/* 人物画像（右側に大きめ配置・縁を背景に溶け込ませる） */}
+      <div className="pointer-events-none absolute right-0 top-0 h-[48vh] w-[66%] sm:w-[54%] lg:h-full lg:w-[48%]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/nagashima_black02.png"
+          alt=""
+          className="h-full w-full object-cover object-top lg:object-bottom"
+        />
+        {/* 左端を背景に溶け込ませる */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/30 to-transparent" />
+        {/* 下端を背景／フォームへ繋ぐ */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050a0e] to-transparent" />
+      </div>
 
       {/* コンテンツ：左カラム */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-start px-6 pb-12 pt-[30vh] sm:px-10 lg:justify-center lg:px-16 lg:pt-12">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-start px-6 pb-12 pt-[34vh] sm:px-10 lg:justify-center lg:px-16 lg:pt-12">
         <div className="w-full max-w-md">
           {/* ワードマーク */}
           <div className="mb-5">
