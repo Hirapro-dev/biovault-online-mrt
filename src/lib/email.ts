@@ -92,41 +92,20 @@ interface RegistrationMailParams {
   watchPageUrl: string;
 }
 
-// 録画配信 登録完了の自動返信メールを送信
-export async function sendRegistrationEmail(
-  params: RegistrationMailParams
-): Promise<boolean> {
-  const { to, name, loginId, password, watchPageUrl } = params;
+// 登録完了メールのHTMLを生成（プレビューでも再利用）
+export function buildRegistrationEmailHtml(params: {
+  name: string;
+  loginId: string;
+  password: string;
+  watchPageUrl: string;
+}): string {
+  const { name, loginId, password, watchPageUrl } = params;
   const memberId = loginId;
-  const subject = "【MRT】録画配信 視聴登録完了のお知らせ";
-
-  const text = `${name} 様
-
-この度は録画配信の視聴登録をいただき、誠にありがとうございます。
-以下のID・パスワードでログインのうえご視聴いただけます。
-
-──────────────────────
-■ ログインID： ${memberId}
-■ パスワード： ${password}
-■ 視聴ページ： ${watchPageUrl}
-──────────────────────
-
-【ご注意事項】
-・本配信に含まれる情報は機密情報です。視聴者本人以外への開示・漏えいは禁止されています。
-・動画の録画・スクリーンショット・複製は禁止されています。
-・ID・パスワードは大切に保管し、第三者と共有しないでください。
-
-本メールは送信専用です。ご返信いただいてもお答えできかねます。
-
-────────────────────────
-株式会社MRT
-────────────────────────`;
-
   // メール内の画像・ボタンは絶対URLが必要
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://bvlive.mrt.co.jp";
   const personImg = `${baseUrl}/nagashima_black03.png`;
 
-  const html = `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="ja">
 <body style="margin:0;padding:0;background:#eef0f4;font-family:'Hiragino Sans','Yu Gothic',sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef0f4;padding:24px 12px;">
@@ -194,6 +173,39 @@ export async function sendRegistrationEmail(
   </table>
 </body>
 </html>`;
+}
+
+// 録画配信 登録完了の自動返信メールを送信
+export async function sendRegistrationEmail(
+  params: RegistrationMailParams
+): Promise<boolean> {
+  const { to, name, loginId, password, watchPageUrl } = params;
+  const memberId = loginId;
+  const subject = "【MRT】録画配信 視聴登録完了のお知らせ";
+
+  const text = `${name} 様
+
+この度は録画配信の視聴登録をいただき、誠にありがとうございます。
+以下のID・パスワードでログインのうえご視聴いただけます。
+
+──────────────────────
+■ ログインID： ${memberId}
+■ パスワード： ${password}
+■ 視聴ページ： ${watchPageUrl}
+──────────────────────
+
+【ご注意事項】
+・本配信に含まれる情報は機密情報です。視聴者本人以外への開示・漏えいは禁止されています。
+・動画の録画・スクリーンショット・複製は禁止されています。
+・ID・パスワードは大切に保管し、第三者と共有しないでください。
+
+本メールは送信専用です。ご返信いただいてもお答えできかねます。
+
+────────────────────────
+株式会社MRT
+────────────────────────`;
+
+  const html = buildRegistrationEmailHtml({ name, loginId, password, watchPageUrl });
 
   return sendEmail({ to, subject, html, text });
 }
