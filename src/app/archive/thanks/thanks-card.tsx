@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, CheckCircle2 } from "lucide-react";
-import { ArchiveBackground } from "../archive-background";
 
 // 個別コピー対応の情報行
 function CopyRow({
@@ -67,8 +66,7 @@ export function ThanksCard({
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-[#050a0e] px-4 py-10">
-      <ArchiveBackground />
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-10">
       <div className="relative z-10 w-full max-w-md">
         <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-teal-400/40 via-cyan-400/20 to-teal-400/30" />
         <div className="relative rounded-2xl bg-[#050a0e]/95 px-6 py-8 text-center shadow-2xl sm:px-10 sm:py-10">

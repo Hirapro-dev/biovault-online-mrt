@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Loader, Eye, EyeOff } from "lucide-react";
-import { ArchiveBackground } from "../archive-background";
 
 // グループA/Bどちらの登録フォームでも共用するコンポーネント
 export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
@@ -148,8 +147,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
     "border-0 bg-[#0d1520] text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40 h-11";
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-[#050a0e] px-4 py-10">
-      <ArchiveBackground />
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-10">
       <div className="relative z-10 w-full max-w-lg">
         <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-teal-400/40 via-cyan-400/20 to-teal-400/30" />
         <div className="relative rounded-2xl bg-[#050a0e]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">

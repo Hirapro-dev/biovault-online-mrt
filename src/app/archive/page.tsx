@@ -3,7 +3,6 @@ import Link from "next/link";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 import { getArchiveMemberId, isAdminSession } from "@/lib/archive-auth";
 import { createPlaybackUrl } from "@/lib/r2";
-import { ArchiveBackground } from "./archive-background";
 import { ArchiveHeader } from "./[slug]/archive-header";
 import type { ArchiveVideo } from "@/types";
 
@@ -62,8 +61,7 @@ export default async function ArchiveIndexPage() {
   );
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#050a0e]">
-      <ArchiveBackground />
+    <div className="relative min-h-screen">
       <div className="relative z-10">
         <ArchiveHeader memberName={memberName} />
       </div>

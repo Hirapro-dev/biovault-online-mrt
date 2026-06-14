@@ -6,7 +6,6 @@ import { isAccessExpired } from "@/lib/archive-access";
 import type { ArchiveVideo } from "@/types";
 import { ArchivePlayer } from "./archive-player";
 import { ArchiveHeader } from "./archive-header";
-import { ArchiveBackground } from "../archive-background";
 
 export const dynamic = "force-dynamic";
 
@@ -74,8 +73,7 @@ export default async function ArchiveWatchPage({
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#050a0e]">
-      <ArchiveBackground />
+    <div className="relative min-h-screen">
       <div className="relative z-10">
         <ArchiveHeader memberName={memberName} />
       </div>
