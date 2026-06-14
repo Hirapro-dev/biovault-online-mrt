@@ -91,6 +91,11 @@ export function ArchivePlayer({
       const result = await res.json();
       if (!res.ok) {
         if (result.expired) setExpired(true);
+        // セッション無効（削除済み会員など）はログインページへ誘導
+        if (result.relogin) {
+          window.location.href = "/archive/login";
+          return;
+        }
         throw new Error(result.error || "再生できませんでした");
       }
 

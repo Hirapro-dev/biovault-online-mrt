@@ -49,6 +49,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ url: playbackUrl, expiresAt: null });
     }
 
+    // 会員の存在確認（削除済み会員の古いセッション対策）
+    const { data: memberRow } = await supabase
+      .from("archive_members")
+      .select("member_id")
+      .eq("member_id", memberId)
+      .maybeSingle();
+    if (!memberRow) {
+      return NextResponse.json(
+        { error: "セッションが無効です。お手数ですが再度ログインしてください", relogin: true },
+        { status: 401 }
+      );
+    }
+
     // 視聴期限チェック（初回再生から72時間）
     const { data: view } = await supabase
       .from("archive_views")
@@ -107,12 +120,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("Play check error:", err);
-    // 原因特定のため一時的にエラー詳細を返す
-    const detail =
-      err instanceof Error ? err.message : JSON.stringify(err);
-    return NextResponse.json(
-      { error: "サーバーエラー", detail },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "サーバーエラー" }, { status: 500 });
   }
 }
