@@ -55,7 +55,7 @@ export default function ArchiveLoginPage() {
           <img
             src="/nagashima_black02.png"
             alt=""
-            className="absolute right-0 top-0 h-full w-[42%] object-cover object-top"
+            className="absolute right-0 top-2 h-full w-[42%] object-cover object-top"
           />
           {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[52%] to-transparent to-[66%]" />
@@ -166,19 +166,21 @@ export default function ArchiveLoginPage() {
       </div>
 
       {/* ===== デスクトップ（左：テキスト＋カード / 右：人物フル） ===== */}
+      {/* 画面が広がってもバランス維持のため中央寄せ最大幅コンテナで囲む */}
       <div className="hidden min-h-screen lg:block">
+       <div className="relative mx-auto min-h-screen max-w-[1280px]">
         {/* 人物画像（右側・下寄せ・やや小さめ） */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/nagashima_black02.png"
           alt=""
-          className="absolute bottom-0 right-0 h-[82%] w-[42%] object-cover object-bottom"
+          className="absolute bottom-0 right-0 h-[90%] w-[46%] object-cover object-bottom"
         />
         {/* 左を暗くフェードして可読性確保 */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[30%] via-[#050a0e]/80 via-[55%] to-transparent" />
 
         {/* 左カラム */}
-        <div className="relative z-10 flex min-h-screen flex-col justify-center px-16 xl:px-24">
+        <div className="relative z-10 flex min-h-screen flex-col justify-center px-10 xl:px-14">
           <div className="w-full max-w-md">
             <div className="mb-5">
               <div className="font-serif text-[28px] tracking-wide text-white">
@@ -269,6 +271,7 @@ export default function ArchiveLoginPage() {
             </div>
           </div>
         </div>
+       </div>
       </div>
     </div>
   );
