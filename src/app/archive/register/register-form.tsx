@@ -144,10 +144,10 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   };
 
   const inputClass =
-    "h-12 rounded-lg border border-white/10 bg-white text-black placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-amber-400/60";
+    "h-12 rounded-lg border-0 bg-[#0d1520] text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40";
 
   return (
-    <div className="relative min-h-screen w-full bg-[#0a0a0a] text-white">
+    <div className="relative min-h-screen w-full bg-gradient-to-b from-[#050a0e] via-[#05140f] to-[#03110c] text-white">
       {/* ヒーロー（永島さん画像 + タイトル） */}
       <div className="relative h-[280px] w-full overflow-hidden sm:h-[340px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -157,21 +157,21 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           className="absolute inset-0 h-full w-full object-cover object-right"
         />
         {/* 左側を黒くフェードしてタイトルの可読性を確保 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/80 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050a0e] to-transparent" />
         <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col justify-center px-6">
           <div className="mb-5">
-            <div className="font-serif text-2xl tracking-wide text-amber-200">BioVault</div>
-            <div className="mt-0.5 text-[11px] tracking-[0.35em] text-amber-300/70">
+            <div className="font-serif text-2xl tracking-wide text-teal-200">BioVault</div>
+            <div className="mt-0.5 text-[11px] tracking-[0.35em] text-teal-300/70">
               Membership Service
             </div>
           </div>
-          <h1 className="font-serif text-3xl font-bold leading-tight text-white sm:text-4xl">
+          <h1 className="bg-gradient-to-r from-teal-200 via-cyan-100 to-teal-200 bg-clip-text font-serif text-3xl font-bold leading-tight text-transparent sm:text-4xl">
             録画配信
             <br />
             視聴登録
           </h1>
-          <div className="mt-4 h-[2px] w-16 bg-amber-400" />
+          <div className="mt-4 h-[2px] w-16 bg-gradient-to-r from-teal-400 to-cyan-400" />
         </div>
       </div>
 
@@ -184,10 +184,10 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
       {/* フォームカード */}
       <div className="mx-auto max-w-2xl px-4 pb-14">
-        <div className="rounded-2xl border border-amber-500/30 bg-[#111111] px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
+        <div className="rounded-2xl border border-teal-500/30 bg-[#070f0c]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-white">申請者情報</h2>
-            <div className="mt-3 h-px w-full bg-gradient-to-r from-amber-500/60 to-transparent" />
+            <div className="mt-3 h-px w-full bg-gradient-to-r from-teal-500/60 to-transparent" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -271,7 +271,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
                   tabIndex={-1}
                   aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
                 >
@@ -295,7 +295,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
                   tabIndex={-1}
                   aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
                 >
@@ -320,7 +320,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                     required
                   />
                   {isZipLoading && (
-                    <Loader className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-amber-500" />
+                    <Loader className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-teal-400" />
                   )}
                 </div>
               </div>
@@ -356,7 +356,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
               <p className="text-sm text-white">
                 この録画配信には機密情報が含まれています。以下の機密保持契約内容をご確認ください。
               </p>
-              <div className="h-40 overflow-y-auto rounded-lg border border-amber-500/20 bg-black/40 p-3 text-sm leading-relaxed text-slate-400">
+              <div className="h-40 overflow-y-auto rounded-lg border border-teal-500/15 bg-black/40 p-3 text-sm leading-relaxed text-slate-400">
                 <p className="mb-2">株式会社MRT（以下「甲」という。）と録画配信視聴者（以下「乙」という。）は，乙が甲から開示された情報（以下「機密情報」という。）の取扱いについて次のとおり契約（以下「本契約」という。）を締結する。</p>
                 <p className="mb-1 font-semibold text-slate-300">第１条（機密情報）</p>
                 <p className="mb-2">本契約において機密情報とは，甲が乙に対して，書面，口頭，電子メールその他方法を問わず開示した技術上または営業上の情報をいう。ただし，次の各号の一に該当する情報については，機密情報に含まれない。<br />・甲から開示を受けた時点で既に公知であった情報<br />・乙が正当な権限を有する第三者から機密保持義務を負うことなく取得した情報<br />・甲から開示を受けた後，乙の責に帰すべき事由によらないで公知になった情報</p>
@@ -384,7 +384,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 <Checkbox
                   checked={agreed}
                   onCheckedChange={(v) => setAgreed(v === true)}
-                  className="border-amber-500/50 data-[state=checked]:border-amber-600 data-[state=checked]:bg-amber-600"
+                  className="border-teal-500/40 data-[state=checked]:border-teal-600 data-[state=checked]:bg-teal-600"
                 />
                 <span className="select-none text-sm text-slate-300">機密保持契約に同意する</span>
               </label>
@@ -398,7 +398,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
             <Button
               type="submit"
-              className="h-12 w-full bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 text-base font-bold text-black hover:from-amber-300 hover:via-yellow-400 hover:to-amber-400"
+              className="h-12 w-full bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 text-base font-semibold text-white hover:from-teal-500 hover:via-cyan-400 hover:to-teal-500"
               disabled={isLoading || !agreed}
             >
               {isLoading ? (
