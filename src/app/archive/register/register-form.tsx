@@ -183,7 +183,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
               Membership Service
             </div>
           </div>
-          <h1 className="font-serif text-[2.5rem] font-bold leading-[1.18] text-white sm:text-5xl lg:text-6xl">
+          <h1 className="font-serif text-[28px] font-bold leading-[1.3] text-white">
             Live配信映像視聴
             <br />
             機密保持契約同意フォーム
