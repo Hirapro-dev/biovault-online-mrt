@@ -148,37 +148,45 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
 
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#050a0e] via-[#05140f] to-[#03110c] text-white">
-      {/* ヒーロー（永島さん画像 + タイトル） */}
-      <div className="relative h-[280px] w-full overflow-hidden sm:h-[340px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/nagashima_black01.png"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-right"
-        />
-        {/* 左側を黒くフェードしてタイトルの可読性を確保 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] via-[#050a0e]/80 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050a0e] to-transparent" />
-        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col justify-center px-6">
-          <div className="mb-5">
-            <div className="font-serif text-2xl tracking-wide text-teal-200">BioVault</div>
-            <div className="mt-0.5 text-[11px] tracking-[0.35em] text-teal-300/70">
+      {/* ヒーロー（背景動画 + 中央寄せタイトル） */}
+      <div className="relative h-[340px] w-full overflow-hidden sm:h-[420px]">
+        {/* 背景動画（元の背景動画を使用） */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/video-bg.png"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        >
+          <source src="/login-bg.mp4" type="video/mp4" />
+        </video>
+        {/* 可読性確保の暗いオーバーレイ + 下端フェード */}
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050a0e] to-transparent" />
+
+        {/* 中央寄せのテキスト（すべて白） */}
+        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col items-center justify-center px-6 text-center">
+          <div className="mb-6">
+            <div className="font-serif text-2xl tracking-wide text-white">BioVault</div>
+            <div className="mt-1 text-[11px] tracking-[0.35em] text-white/80">
               Membership Service
             </div>
           </div>
-          <h1 className="bg-gradient-to-r from-teal-200 via-cyan-100 to-teal-200 bg-clip-text font-serif text-3xl font-bold leading-tight text-transparent sm:text-4xl">
-            録画配信
+          <h1 className="font-serif text-2xl font-bold leading-snug text-white sm:text-4xl">
+            Live配信映像視聴
             <br />
-            視聴登録
+            機密保持契約同意フォーム
           </h1>
-          <div className="mt-4 h-[2px] w-16 bg-gradient-to-r from-teal-400 to-cyan-400" />
+          <div className="mt-5 h-[2px] w-16 bg-white/80" />
         </div>
       </div>
 
       {/* 導入文 */}
-      <div className="mx-auto max-w-3xl px-6 py-7">
+      <div className="mx-auto max-w-3xl px-6 py-7 text-center">
         <p className="text-base leading-relaxed text-slate-300">
-          本登録は機密情報を含む録画配信を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
+          本フォームは機密情報を含むLive配信映像を視聴いただくための手続きです。機密保持契約にご同意のうえ、必要事項をご入力ください。
         </p>
       </div>
 
