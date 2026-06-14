@@ -47,19 +47,19 @@ export default function ArchiveLoginPage() {
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
       {/* ヒーロー（ボーダーなし・内側640px・右人物・左テキスト＋コピー） */}
       <div className="relative bg-[#050a0e]">
-        <div className="relative mx-auto h-[320px] w-full max-w-[640px] overflow-hidden">
+        <div className="relative mx-auto h-[260px] w-full max-w-[640px] overflow-hidden">
           {/* 人物画像（右側に配置・上寄せ） */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/nagashima_black02.png"
             alt=""
-            className="absolute right-0 top-0 h-full w-[48%] object-cover object-top"
+            className="absolute right-0 top-0 h-full w-[42%] object-cover object-top"
           />
           {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[52%] to-transparent to-[66%]" />
 
           {/* 左寄せのテキスト（コピーまでヒーロー内に） */}
-          <div className="absolute inset-0 flex flex-col justify-center pl-6 pr-[44%]">
+          <div className="absolute inset-0 flex flex-col justify-center pl-6 pr-[38%]">
             <div className="mb-4">
               <div className="font-serif text-[20px] tracking-wide text-white">
                 BioVault
