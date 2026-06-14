@@ -211,7 +211,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
             <div className="space-y-1.5">
               <label className="text-base font-medium text-white">
                 メールアドレス
-                <span className="ml-2 text-xs font-normal text-slate-500">
+                <span className="ml-2 rounded-full bg-amber-400/15 px-2 py-0.5 text-xs font-semibold text-amber-300">
                   ※ログインIDになります
                 </span>
               </label>
