@@ -122,55 +122,70 @@ export async function sendRegistrationEmail(
 株式会社MRT
 ────────────────────────`;
 
+  // メール内の画像・ボタンは絶対URLが必要
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://bvlive.mrt.co.jp";
+  const personImg = `${baseUrl}/nagashima_black03.png`;
+
   const html = `<!DOCTYPE html>
 <html lang="ja">
-<body style="margin:0;padding:0;background:#f4f6f8;font-family:'Hiragino Sans','Yu Gothic',sans-serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:24px 0;">
+<body style="margin:0;padding:0;background:#eef0f4;font-family:'Hiragino Sans','Yu Gothic',sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef0f4;padding:24px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;">
+          <!-- ヘッダー（グラデーション） -->
           <tr>
-            <td style="background:linear-gradient(90deg,#0d9488,#06b6d4);padding:24px 32px;">
-              <p style="margin:0;color:#ffffff;font-size:18px;font-weight:bold;">録画配信 視聴登録完了</p>
+            <td style="background:#5b2be0;background:linear-gradient(90deg,#5b2be0,#2bb8d8);padding:28px 36px;">
+              <p style="margin:0;color:#ffffff;font-size:26px;font-weight:bold;font-family:Georgia,serif;">BioVault</p>
+              <p style="margin:6px 0 0;color:#e7e9ff;font-size:12px;letter-spacing:0.3em;">Membership Service</p>
             </td>
           </tr>
+          <!-- 本文 -->
           <tr>
-            <td style="padding:32px;">
-              <p style="margin:0 0 16px;font-size:15px;color:#0f172a;">${name} 様</p>
-              <p style="margin:0 0 24px;font-size:14px;line-height:1.8;color:#334155;">
-                この度は録画配信の視聴登録をいただき、誠にありがとうございます。<br>
-                以下のID・パスワードでログインのうえご視聴いただけます。
-              </p>
-
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;margin-bottom:24px;">
-                <tr><td style="padding:16px 20px;">
-                  <p style="margin:0 0 4px;font-size:11px;color:#64748b;letter-spacing:1px;">ログインID</p>
-                  <p style="margin:0 0 14px;font-size:18px;font-weight:bold;color:#0f766e;font-family:monospace;">${memberId}</p>
-                  <p style="margin:0 0 4px;font-size:11px;color:#64748b;letter-spacing:1px;">パスワード</p>
-                  <p style="margin:0;font-size:18px;font-weight:bold;color:#0f766e;font-family:monospace;">${password}</p>
-                </td></tr>
-              </table>
-
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-                <tr><td align="center">
-                  <a href="${watchPageUrl}" style="display:inline-block;background:linear-gradient(90deg,#0d9488,#06b6d4);color:#ffffff;text-decoration:none;font-size:15px;font-weight:bold;padding:14px 32px;border-radius:8px;">視聴ページへ進む</a>
-                </td></tr>
-              </table>
-
-              <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;">
-                <p style="margin:0 0 8px;font-size:13px;font-weight:bold;color:#b45309;">ご注意事項</p>
-                <ul style="margin:0;padding-left:18px;font-size:12px;line-height:1.9;color:#78350f;">
-                  <li>本配信に含まれる情報は機密情報です。視聴者本人以外への開示・漏えいは禁止されています。</li>
-                  <li>動画の録画・スクリーンショット・複製は禁止されています。</li>
-                  <li>ID・パスワードは大切に保管し、第三者と共有しないでください。</li>
-                </ul>
-              </div>
+            <td style="padding:32px 36px 8px;">
+              <p style="margin:0 0 18px;font-size:20px;font-weight:bold;color:#0f172a;">${name} 様</p>
+              <p style="margin:0 0 8px;font-size:15px;line-height:1.9;color:#334155;">BioVault メンバーシップへようこそ。</p>
+              <p style="margin:0;font-size:15px;line-height:1.9;color:#334155;">会員アカウントが発行されました。以下の情報でログインしてください。</p>
             </td>
           </tr>
+          <!-- 人物画像 -->
           <tr>
-            <td style="background:#0f172a;padding:16px 32px;">
-              <p style="margin:0;font-size:11px;color:#94a3b8;">本メールは送信専用です。ご返信いただいてもお答えできかねます。</p>
-              <p style="margin:4px 0 0;font-size:11px;color:#64748b;">© MRT inc. All rights reserved.</p>
+            <td align="center" style="padding:8px 36px 0;">
+              <img src="${personImg}" alt="" width="240" style="display:block;width:240px;max-width:70%;height:auto;" />
+            </td>
+          </tr>
+          <!-- ログイン情報カード -->
+          <tr>
+            <td style="padding:8px 36px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
+                <tr><td style="padding:20px 24px;">
+                  <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
+                  <p style="margin:0 0 16px;font-size:22px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
+                  <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">パスワード</p>
+                  <p style="margin:0;font-size:22px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+          <!-- ボタン -->
+          <tr>
+            <td align="center" style="padding:24px 36px 8px;">
+              <a href="${watchPageUrl}" style="display:inline-block;background:#5b2be0;background:linear-gradient(90deg,#5b2be0,#2bb8d8);color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;padding:16px 56px;border-radius:999px;">ログインページへ</a>
+            </td>
+          </tr>
+          <!-- 注意事項 -->
+          <tr>
+            <td style="padding:16px 36px 28px;">
+              <p style="margin:0 0 6px;font-size:13px;line-height:1.8;color:#64748b;">※ 初回ログイン後、パスワードの変更をお願いいたします。</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:#64748b;">※ ログイン情報は第三者に知られないよう大切に管理してください。</p>
+            </td>
+          </tr>
+          <!-- フッター -->
+          <tr>
+            <td style="border-top:1px solid #e5e7eb;padding:24px 36px 28px;text-align:center;">
+              <p style="margin:0 0 6px;font-size:13px;color:#64748b;">BioVault（株式会社MRT）</p>
+              <p style="margin:0 0 12px;font-size:13px;color:#64748b;">TEL: 0120-325-699 ／ MAIL: info@biovault.jp</p>
+              <p style="margin:0;font-size:12px;color:#aab2c0;">© ${new Date().getFullYear()} MRT Inc. All Rights Reserved.</p>
             </td>
           </tr>
         </table>
