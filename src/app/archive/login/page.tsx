@@ -177,7 +177,7 @@ export default function ArchiveLoginPage() {
           className="absolute bottom-0 right-0 h-[90%] w-[46%] object-contain object-right-bottom"
         />
         {/* 左を暗くフェードして可読性確保 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[30%] via-[#050a0e]/80 via-[55%] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[40%] via-[#050a0e] via-[48%] to-transparent to-[54%]" />
 
         {/* 左カラム */}
         <div className="relative z-10 flex min-h-screen flex-col justify-center px-10 xl:px-14">
