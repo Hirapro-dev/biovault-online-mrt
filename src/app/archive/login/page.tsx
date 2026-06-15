@@ -55,7 +55,7 @@ export default function ArchiveLoginPage() {
           <img
             src="/nagashima_black02.png"
             alt=""
-            className="absolute right-0 top-2 h-full w-[42%] object-cover object-top"
+            className="absolute right-[-10px] top-2 h-full w-[40%] object-cover object-top"
           />
           {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[52%] to-transparent to-[66%]" />
@@ -187,7 +187,7 @@ export default function ArchiveLoginPage() {
                 BioVault
               </div>
               <div className="mt-1 text-[13px] tracking-[0.3em] text-teal-200/80">
-                Membership Service
+              Live stream viewing
               </div>
             </div>
             <h1 className="font-serif text-[40px] font-bold leading-[1.25] text-white">

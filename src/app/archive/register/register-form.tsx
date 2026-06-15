@@ -168,7 +168,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 BioVault
               </div>
               <div className="text-[12px] tracking-[0.2em] text-teal-200/80">
-                Membership Service
+              Live stream viewing
               </div>
             </div>
             <h1 className="font-serif text-[24px] font-bold leading-[1.3] text-white">
