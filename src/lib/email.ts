@@ -188,9 +188,24 @@ export function buildRegistrationEmailHtml(params: {
           </tr>
           <!-- 注意事項 -->
           <tr>
-            <td style="padding:16px 36px 28px;">
+            <td style="padding:16px 36px 8px;">
               <p style="margin:0 0 6px;font-size:13px;line-height:1.8;color:#64748b;">※ 初回ログイン後、パスワードの変更をお願いいたします。</p>
               <p style="margin:0;font-size:13px;line-height:1.8;color:#64748b;">※ ログイン情報は第三者に知られないよう大切に管理してください。</p>
+            </td>
+          </tr>
+          <!-- ご注意事項（機密保持） -->
+          <tr>
+            <td style="padding:8px 36px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;">
+                <tr><td style="padding:16px 20px;">
+                  <p style="margin:0 0 8px;font-size:13px;font-weight:bold;color:#b45309;">ご注意事項</p>
+                  <ul style="margin:0;padding-left:18px;font-size:12px;line-height:1.9;color:#78350f;">
+                    <li>本配信に含まれる情報は機密情報です。視聴者本人以外への開示・漏えいは禁止されています。</li>
+                    <li>動画の録画・スクリーンショット・複製は禁止されています。</li>
+                    <li>ID・パスワードは大切に保管し、第三者と共有しないでください。</li>
+                  </ul>
+                </td></tr>
+              </table>
             </td>
           </tr>
           <!-- フッター -->
