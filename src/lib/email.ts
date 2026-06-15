@@ -164,18 +164,21 @@ export function buildRegistrationEmailHtml(params: {
           <tr class="bv-stack" style="display:none;max-height:0;overflow:hidden;">
             <td style="padding:8px 28px 0;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr><td align="center" style="padding:0 0 8px;">
-                  <img src="${personImg}" alt="" width="200" style="display:block;width:200px;max-width:70%;height:auto;" />
+                <tr><td align="center" style="padding:0;">
+                  <img src="${personImg}" alt="" width="200" style="display:block;width:200px;max-width:50%;height:auto;" />
                 </td></tr>
                 <tr><td>
-                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
-                    <tr><td style="padding:20px 24px;">
-                      <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
-                      <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
-                      <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">パスワード</p>
-                      <p style="margin:0;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
-                    </td></tr>
-                  </table>
+                  <!-- カードを上へ引き上げて人物画像と重ねる（カードを前面に） -->
+                  <div style="margin-top:-56px;position:relative;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
+                      <tr><td style="padding:20px 24px;">
+                        <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
+                        <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
+                        <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">パスワード</p>
+                        <p style="margin:0;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
+                      </td></tr>
+                    </table>
+                  </div>
                 </td></tr>
               </table>
             </td>
@@ -187,12 +190,6 @@ export function buildRegistrationEmailHtml(params: {
             </td>
           </tr>
           <!-- 注意事項 -->
-          <tr>
-            <td style="padding:16px 36px 8px;">
-              <p style="margin:0 0 6px;font-size:13px;line-height:1.8;color:#64748b;">※ 初回ログイン後、パスワードの変更をお願いいたします。</p>
-              <p style="margin:0;font-size:13px;line-height:1.8;color:#64748b;">※ ログイン情報は第三者に知られないよう大切に管理してください。</p>
-            </td>
-          </tr>
           <!-- ご注意事項（機密保持） -->
           <tr>
             <td style="padding:8px 36px 28px;">
