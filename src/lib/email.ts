@@ -107,6 +107,17 @@ export function buildRegistrationEmailHtml(params: {
 
   return `<!DOCTYPE html>
 <html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  /* スマホ表示時は「人物画像 → カード」の縦積みに切り替え */
+  @media only screen and (max-width:480px) {
+    .bv-2col { display:none !important; max-height:0 !important; overflow:hidden !important; }
+    .bv-stack { display:block !important; max-height:none !important; overflow:visible !important; }
+  }
+</style>
+</head>
 <body style="margin:0;padding:0;background:#eef0f4;font-family:'Hiragino Sans','Yu Gothic',sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef0f4;padding:24px 12px;">
     <tr>
@@ -127,8 +138,8 @@ export function buildRegistrationEmailHtml(params: {
               <p style="margin:0;font-size:15px;line-height:1.9;color:#334155;">会員アカウントが発行されました。以下の情報でログインしてください。</p>
             </td>
           </tr>
-          <!-- ログイン情報カード（左）＋ 人物画像（右） -->
-          <tr>
+          <!-- PC：カード（左）＋ 人物画像（右）の横並び -->
+          <tr class="bv-2col">
             <td style="padding:8px 28px 0;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
@@ -136,9 +147,9 @@ export function buildRegistrationEmailHtml(params: {
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
                       <tr><td style="padding:20px 24px;">
                         <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
-                        <p style="margin:0 0 16px;font-size:22px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
+                        <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
                         <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">パスワード</p>
-                        <p style="margin:0;font-size:22px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
+                        <p style="margin:0;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
                       </td></tr>
                     </table>
                   </td>
@@ -146,6 +157,26 @@ export function buildRegistrationEmailHtml(params: {
                     <img src="${personImg}" alt="" width="200" style="display:block;width:200px;max-width:100%;height:auto;" />
                   </td>
                 </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- スマホ：人物画像 → カード の縦積み（既定は非表示、メディアクエリで表示） -->
+          <tr class="bv-stack" style="display:none;max-height:0;overflow:hidden;">
+            <td style="padding:8px 28px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr><td align="center" style="padding:0 0 8px;">
+                  <img src="${personImg}" alt="" width="200" style="display:block;width:200px;max-width:70%;height:auto;" />
+                </td></tr>
+                <tr><td>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
+                    <tr><td style="padding:20px 24px;">
+                      <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
+                      <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${memberId}</p>
+                      <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">パスワード</p>
+                      <p style="margin:0;font-size:18px;font-weight:bold;color:#1d4ed8;font-family:'Courier New',monospace;letter-spacing:1px;">${password}</p>
+                    </td></tr>
+                  </table>
+                </td></tr>
               </table>
             </td>
           </tr>
