@@ -134,8 +134,8 @@ export function buildRegistrationEmailHtml(params: {
           <tr>
             <td style="padding:32px 36px 8px;">
               <p style="margin:0 0 18px;font-size:20px;font-weight:bold;color:#0f172a;">${name} 様</p>
-              <p style="margin:0 0 8px;font-size:15px;line-height:1.9;color:#334155;">BioVault メンバーシップへようこそ。</p>
-              <p style="margin:0;font-size:15px;line-height:1.9;color:#334155;">会員アカウントが発行されました。以下の情報でログインしてください。</p>
+              <p style="margin:0 0 8px;font-size:15px;line-height:1.9;color:#334155;">この度はLive配信録画映像の視聴登録をいただき、誠にありがとうございます。</p>
+              <p style="margin:0;font-size:15px;line-height:1.9;color:#334155;">視聴用のID・パスワードを発行いたしました。以下の情報でログインしてください。</p>
             </td>
           </tr>
           <!-- PC：カード（左）＋ 人物画像（右）の横並び -->
@@ -215,12 +215,12 @@ export async function sendRegistrationEmail(
 ): Promise<boolean> {
   const { to, name, loginId, password, watchPageUrl } = params;
   const memberId = loginId;
-  const subject = "【MRT】録画配信 視聴登録完了のお知らせ";
+  const subject = "【MRT】Live配信録画映像視聴 ID・パスワード発行のお知らせ";
 
   const text = `${name} 様
 
-この度は録画配信の視聴登録をいただき、誠にありがとうございます。
-以下のID・パスワードでログインのうえご視聴いただけます。
+この度はLive配信録画映像の視聴登録をいただき、誠にありがとうございます。
+視聴用のID・パスワードを発行いたしました。以下の情報でログインのうえご視聴いただけます。
 
 ──────────────────────
 ■ ログインID： ${memberId}
