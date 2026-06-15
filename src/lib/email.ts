@@ -126,8 +126,8 @@ export function buildRegistrationEmailHtml(params: {
           <!-- ヘッダー（グラデーション） -->
           <tr>
             <td style="background:#5b2be0;background:linear-gradient(90deg,#5b2be0,#2bb8d8);padding:28px 36px;">
-              <p style="margin:0;color:#ffffff;font-size:26px;font-weight:bold;font-family:Georgia,serif;">BioVault</p>
-              <p style="margin:6px 0 0;color:#e7e9ff;font-size:12px;letter-spacing:0.3em;">Membership Service</p>
+              <p style="margin:0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:500;letter-spacing:1px;line-height:1.1;">BioVault</p>
+              <p style="margin:6px 0 0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:11px;font-weight:500;letter-spacing:3px;opacity:0.9;line-height:1.1;">Live stream viewing</p>
             </td>
           </tr>
           <!-- 本文 -->
@@ -169,7 +169,7 @@ export function buildRegistrationEmailHtml(params: {
                 </td></tr>
                 <tr><td>
                   <!-- カードを上へ引き上げて人物画像と重ねる（カードを前面に） -->
-                  <div style="margin-top:-56px;position:relative;">
+                  <div style="margin-top:-36px;position:relative;">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
                       <tr><td style="padding:20px 24px;">
                         <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
