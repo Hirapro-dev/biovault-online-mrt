@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,6 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [nameKana, setNameKana] = useState("");
-  const composeKana = useRef("");
   // ふりがなを手入力で編集したか（手入力後はAPI自動変換で上書きしない）
   const kanaEdited = useRef(false);
   const [phone, setPhone] = useState("");
@@ -29,64 +28,33 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isHiraganaOnly = (s: string) => /^[ぁ-ゖー　\s]*$/.test(s);
-
-  const handleNameCompositionStart = () => {
-    composeKana.current = "";
-    if (/[\s　]$/.test(name)) {
-      setNameKana((prev) =>
-        prev && !/[\s　]$/.test(prev) ? prev + " " : prev
-      );
-    }
-  };
-
-  const commitKana = () => {
-    if (composeKana.current) {
-      const kana = composeKana.current;
-      composeKana.current = "";
-      setNameKana((prev) => prev + kana);
-    }
-  };
-
-  const handleNameCompositionEnd = () => {
-    commitKana();
-  };
-
+  // 氏名入力でふりがなを自動生成（autoKana方式：PC・スマホ対応）
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const native = e.nativeEvent as InputEvent;
-    const value = e.target.value;
-    setName(value);
-    if (value === "") {
+    setName(e.target.value);
+    if (!e.target.value) {
+      kanaEdited.current = false;
       setNameKana("");
-      composeKana.current = "";
-      return;
-    }
-    const data = native?.data;
-    if (native?.isComposing && data) {
-      if (/[一-龯々]/.test(data)) {
-        commitKana();
-      } else if (isHiraganaOnly(data)) {
-        composeKana.current = data;
-      }
     }
   };
 
-  // 氏名フォーカスアウト時にサーバーAPIで漢字→かな変換（スマホ対応）
-  const handleNameBlur = async () => {
-    if (kanaEdited.current) return; // 手入力済みなら上書きしない
-    if (!name.trim()) return;
-    try {
-      const res = await fetch("/api/kana", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: name }),
-      });
-      const data = await res.json();
-      if (data.kana) setNameKana(data.kana);
-    } catch {
-      // 失敗時は手入力にフォールバック
-    }
-  };
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let cancelled = false;
+    (async () => {
+      const AutoKana = await import("vanilla-autokana");
+      if (cancelled) return;
+      const auto = AutoKana.bind("#reg-name", undefined, { katakana: false });
+      timer = setInterval(() => {
+        if (kanaEdited.current) return;
+        const k = auto.getFurigana();
+        if (k) setNameKana(k);
+      }, 100);
+    })();
+    return () => {
+      cancelled = true;
+      if (timer) clearInterval(timer);
+    };
+  }, []);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/[^0-9]/g, "");
@@ -221,10 +189,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
               <label className="text-base font-medium text-white">氏名</label>
               <Input
                 defaultValue=""
+                id="reg-name"
                 onChange={handleNameChange}
-                onCompositionStart={handleNameCompositionStart}
-                onCompositionEnd={handleNameCompositionEnd}
-                onBlur={handleNameBlur}
                 placeholder="山田 太郎"
                 className={inputClass}
                 required
