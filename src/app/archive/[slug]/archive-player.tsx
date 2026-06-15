@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Play, Loader2, AlertCircle } from "lucide-react";
 
 // 録画配信：動画プレーヤー（初回再生から72時間の視聴期限付き）
@@ -132,27 +131,23 @@ export function ArchivePlayer({
           className="relative flex aspect-video w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-xl border border-teal-500/15 bg-[#0d1520]/60 bg-cover bg-center"
           style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : undefined}
         >
-          {/* サムネイルの上に暗めのオーバーレイ（ボタンの視認性確保） */}
-          {thumbnailUrl && <div className="absolute inset-0 bg-black/60" />}
+          {/* サムネイルの上に薄いオーバーレイ（はっきり見えるよう軽め） */}
+          {thumbnailUrl && <div className="absolute inset-0 bg-black/25" />}
           <div className="relative z-10 flex flex-col items-center gap-4 px-4 text-center">
             {!expired ? (
-              <Button
+              <button
+                type="button"
                 onClick={handlePlay}
                 disabled={isLoading}
-                className="h-14 gap-2 bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 px-8 text-base font-semibold text-white hover:from-teal-500 hover:via-cyan-400 hover:to-teal-500"
+                aria-label="再生する"
+                className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 text-white shadow-lg transition hover:from-teal-500 hover:via-cyan-400 hover:to-teal-500 disabled:opacity-70"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    準備中...
-                  </>
+                  <Loader2 className="h-7 w-7 animate-spin" />
                 ) : (
-                  <>
-                    <Play className="h-5 w-5" />
-                    再生する
-                  </>
+                  <Play className="h-7 w-7 translate-x-[1px]" fill="currentColor" />
                 )}
-              </Button>
+              </button>
             ) : (
               <div className="flex flex-col items-center gap-2 text-red-400">
                 <AlertCircle className="h-8 w-8" />
