@@ -131,7 +131,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   };
 
   const inputClass =
-    "h-12 rounded-lg border-0 bg-[#0d1520] text-white placeholder:text-slate-600 focus-visible:ring-1 focus-visible:ring-teal-500/40";
+    "h-12 rounded-lg border-2 border-slate-300 bg-white text-base text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-500 focus-visible:ring-2 focus-visible:ring-teal-500/40";
 
   return (
     <div className="relative min-h-screen w-full bg-[#050a0e] text-white">
@@ -264,7 +264,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
                   tabIndex={-1}
                   aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
                 >
@@ -288,7 +288,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
                   tabIndex={-1}
                   aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
                 >

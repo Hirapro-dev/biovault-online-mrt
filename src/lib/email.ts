@@ -169,7 +169,7 @@ export function buildRegistrationEmailHtml(params: {
                 </td></tr>
                 <tr><td>
                   <!-- カードを上へ引き上げて人物画像と重ねる（カードを前面に） -->
-                  <div style="margin-top:-36px;position:relative;">
+                  <div style="margin-top:-48px;position:relative;">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4fb;border-radius:12px;">
                       <tr><td style="padding:20px 24px;">
                         <p style="margin:0 0 4px;font-size:12px;color:#6b7280;">ログインID</p>
