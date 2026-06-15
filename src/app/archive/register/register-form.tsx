@@ -13,6 +13,8 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
   const [name, setName] = useState("");
   const [nameKana, setNameKana] = useState("");
   const composeKana = useRef("");
+  // ふりがなを手入力で編集したか（手入力後はAPI自動変換で上書きしない）
+  const kanaEdited = useRef(false);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,6 +68,23 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
       } else if (isHiraganaOnly(data)) {
         composeKana.current = data;
       }
+    }
+  };
+
+  // 氏名フォーカスアウト時にサーバーAPIで漢字→かな変換（スマホ対応）
+  const handleNameBlur = async () => {
+    if (kanaEdited.current) return; // 手入力済みなら上書きしない
+    if (!name.trim()) return;
+    try {
+      const res = await fetch("/api/kana", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: name }),
+      });
+      const data = await res.json();
+      if (data.kana) setNameKana(data.kana);
+    } catch {
+      // 失敗時は手入力にフォールバック
     }
   };
 
@@ -156,7 +175,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
           <img
             src="/nagashima_black01.png"
             alt=""
-            className="absolute right-0 top-0 h-full w-[52%] object-cover object-top sm:w-[48%]"
+            className="absolute right-0 top-2 h-full w-[42%] object-cover object-top sm:w-[48%]"
           />
           {/* 左のテキスト領域のみ暗くし、人物はクリアに保つ横グラデーション */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[42%] via-[#050a0e] via-[50%] to-transparent to-[64%]" />
@@ -205,6 +224,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
                 onChange={handleNameChange}
                 onCompositionStart={handleNameCompositionStart}
                 onCompositionEnd={handleNameCompositionEnd}
+                onBlur={handleNameBlur}
                 placeholder="山田 太郎"
                 className={inputClass}
                 required
@@ -220,7 +240,7 @@ export function ArchiveRegisterForm({ group }: { group: "a" | "b" }) {
               </label>
               <Input
                 value={nameKana}
-                onChange={(e) => setNameKana(e.target.value)}
+                onChange={(e) => { kanaEdited.current = true; setNameKana(e.target.value); }}
                 placeholder="やまだ たろう"
                 className={inputClass}
                 required
