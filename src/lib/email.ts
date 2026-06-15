@@ -125,7 +125,7 @@ export function buildRegistrationEmailHtml(params: {
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;">
           <!-- ヘッダー（グラデーション） -->
           <tr>
-            <td style="background:#5b2be0;background:linear-gradient(90deg,#5b2be0,#2bb8d8);padding:28px 36px;">
+            <td style="background:#5b2be0;background:linear-gradient(90deg,#5b2be0,#2bb8d8);padding:18px 24px;">
               <p style="margin:0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:500;letter-spacing:1px;line-height:1.1;">BioVault</p>
               <p style="margin:6px 0 0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:11px;font-weight:500;letter-spacing:3px;opacity:0.9;line-height:1.1;">Live stream viewing</p>
             </td>

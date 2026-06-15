@@ -67,10 +67,10 @@ export default function ArchiveLoginPage() {
                 BioVault
               </div>
               <div className="text-[12px] tracking-[0.2em] text-teal-200/80">
-                Membership Service
+              Live stream viewing
               </div>
             </div>
-            <h1 className="font-serif text-[24px] font-bold leading-[1.3] text-white">
+            <h1 className="font-serif text-[24px] font-bold leading-[1.4] text-white">
               Live配信映像視聴
               <br />
               ログインページ
@@ -85,7 +85,7 @@ export default function ArchiveLoginPage() {
       {/* 本文（PC・スマホ共通で640px幅） */}
       <div className="relative z-20 mx-auto w-full max-w-[640px]">
         {/* フォームカード（スマホは人物画像と重なるよう上に出す） */}
-        <div className="mt-2 px-4 pb-14 sm:mt-0 sm:pt-7">
+        <div className="mt-0 px-4 pb-14 sm:mt-0 sm:pt-7">
           <div className="rounded-2xl border border-teal-500/30 bg-[#0a0e13]/95 px-6 py-8 shadow-2xl sm:px-10 sm:py-10">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
@@ -174,7 +174,7 @@ export default function ArchiveLoginPage() {
         <img
           src="/nagashima_black02.png"
           alt=""
-          className="absolute bottom-0 right-0 h-[90%] w-[46%] object-cover object-bottom"
+          className="absolute bottom-0 right-0 h-[90%] w-[46%] object-contain object-right-bottom"
         />
         {/* 左を暗くフェードして可読性確保 */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#050a0e] from-[30%] via-[#050a0e]/80 via-[55%] to-transparent" />
